@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sudoku-solver"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Tim Vink", email = "vinktim@gmail.com"},
+]
+requires-python = ">=3.12"
+dependencies = [
+    "lxml>=5.2.2",
+    "numpy>=1.23.0",
+    "rich>=12.4.4",
+]
+
+
+[dependency-groups]
+dev = [
+    "beautifulsoup4>=4.13.3",
+    "ipdb>=0.13.9",
+    "ipykernel>=6.29.5",
+    "ipython>=8.4.0",
+    "lxml>=5.2.2",
+    "numpy>=1.23.0",
+    "pdbpp>=0.10.3",
+    "pytest>=5.2",
+    "requests>=2.32.3",
+    "rich>=12.4.4",
+]
