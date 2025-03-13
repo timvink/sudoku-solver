@@ -4,13 +4,13 @@ This is a sudoku solver that helps you solve sudoku puzzles by showing you the e
 
 ## Ideas
 
-- scrape sudokuoftheday.com with gitscraper
+- github action to scrape sudokuoftheday.com with gitscraper
 - deploy webapp with optical camera recognition, and solver in Python via PyScript
 
 ## TODO
 
-- Download more sudoku puzzles from sudokuoftheday.com for testing
 - implement more strategies
+
 - fix typing issues
 - clear git history.
 

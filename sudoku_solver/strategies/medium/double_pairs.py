@@ -1,8 +1,10 @@
-from sudoku_solver.puzzle import Puzzle, BlockRow, BlockColumn
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sudoku_solver.puzzle import Puzzle
 import logging
 from itertools import combinations
 
-def double_pairs(p: Puzzle) -> bool:
+def double_pairs(p: 'Puzzle', digits: list[int] | None = None) -> bool:
     """
     Applies the double pairs strategy.
     
@@ -20,14 +22,15 @@ def double_pairs(p: Puzzle) -> bool:
     
     Args:
         p (Puzzle): The puzzle to solve.
-        
+        digits (list[int] | None): The digits to check. If None, all digits will be checked.
+
     Returns:
         bool: Whether 1 or more cells have been updated.
     """
     updates_count = 0
     
     # Process each candidate digit
-    for digit in range(1, 10):
+    for digit in digits or range(1, 10):
         # Check all block rows
         for block_row in p.blockrows:
             updates_count += _check_block_group(block_row.blocks, digit, is_row=True)
@@ -67,6 +70,10 @@ def _check_block_group(blocks, digit, is_row=True):
             
             # Skip if either block doesn't have the digit as a candidate
             if not cells1 or not cells2:
+                continue
+
+            # Double pairs will have only two cells in each block that can contain the digit
+            if len(cells1) != 2 or len(cells2) != 2:
                 continue
                 
             # Find the lines (rows or columns) the digit appears in for each block

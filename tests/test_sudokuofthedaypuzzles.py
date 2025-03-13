@@ -18,6 +18,11 @@ def read_all_json_files_in_directory(directory):
 
 EXAMPLES = read_all_json_files_in_directory("tests/fixtures")
 
+levels = ['beginner','easy','medium','tricky','fiendish','diabolical']
+for level in levels:
+    unique_strategies = {strategy for ex in EXAMPLES if level in ex['url'] for strategy in ex['strategies']}
+    print(f"{level}: {unique_strategies}")
+
 def test_one():
     ex = EXAMPLES[0]
     p = Puzzle(ex['puzzle'])
@@ -42,6 +47,30 @@ def test_easy_examples(strategies, puzzle, url):
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'medium' in ex['url']])
 def test_medium_examples(strategies, puzzle, url):
+    p = Puzzle(puzzle)
+    p.solve()
+    assert p.is_solved()
+    assert p.strategies_used == set(strategies)
+
+@pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'tricky' in ex['url']])
+@pytest.mark.skip(reason="Tricky examples are not implemented yet")
+def test_tricky_examples(strategies, puzzle, url):
+    p = Puzzle(puzzle)
+    p.solve()
+    assert p.is_solved()
+    assert p.strategies_used == set(strategies)
+
+@pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'fiendish' in ex['url']])
+@pytest.mark.skip(reason="Fiendish examples are not implemented yet")
+def test_fiendish_examples(strategies, puzzle, url):
+    p = Puzzle(puzzle)
+    p.solve()
+    assert p.is_solved()
+    assert p.strategies_used == set(strategies)
+
+@pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'diabolical' in ex['url']])
+@pytest.mark.skip(reason="Diabolical examples are not implemented yet")
+def test_diabolical_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
     p.solve()
     assert p.is_solved()

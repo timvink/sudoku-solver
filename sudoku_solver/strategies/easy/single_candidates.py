@@ -1,9 +1,12 @@
-from sudoku_solver.puzzle import Cell, Puzzle
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sudoku_solver.puzzle import Cell, Puzzle
+
 from typing import List
 import logging
 
 
-def single_candidates(p: Puzzle) -> bool:
+def single_candidates(p: 'Puzzle') -> bool:
     """
     Applies single candidate strategy.
 
@@ -37,7 +40,7 @@ def single_candidates(p: Puzzle) -> bool:
     return solution_found
 
 
-def _single_candidate_iteration(cells) -> List[Cell]:
+def _single_candidate_iteration(cells: List['Cell']) -> List['Cell']:
     solved_cells = []
     for cell in cells:
         if _check_solved(cell):
@@ -45,7 +48,7 @@ def _single_candidate_iteration(cells) -> List[Cell]:
     return solved_cells
 
 
-def _check_solved(cell):
+def _check_solved(cell: 'Cell') -> bool:
     if cell.is_solved:
         return False
     options = [m for m in cell.markup if m != 0]

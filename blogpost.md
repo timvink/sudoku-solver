@@ -101,3 +101,13 @@ That because we then need to keep track of how many rows for each value.
 
 reflect on using LLMs for code:
 https://simonwillison.net/2025/Mar/11/using-llms-for-code/
+
+Example prompt to `Claude 3.7 Sonnet Thinking`:
+
+```
+I am writing a sudoku puzzle solver, see `@puzzle.py` .
+
+I've already implemented the double pairs strategy in `@double_pairs.py` , which implements the technique described in `@https://www.sudokuoftheday.com/techniques/double-pairs` .
+
+Now write the implementation for `@multiple_lines.py` , as described in `@https://www.sudokuoftheday.com/techniques/multiple-lines` .
+```

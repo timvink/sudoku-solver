@@ -21,10 +21,13 @@ Hidden= find set of 3 values that only occur in 3 cells markup.
 """
 
 import logging
-from sudoku_solver.puzzle import Puzzle
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sudoku_solver.puzzle import Puzzle
+
 from itertools import combinations, chain
 
-def hidden_subset(p: Puzzle) -> bool:
+def hidden_subset(p: 'Puzzle') -> bool:
     """
     Applies hidden subset strategies.
 

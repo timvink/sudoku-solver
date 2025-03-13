@@ -1,7 +1,10 @@
-from sudoku_solver.puzzle import Puzzle
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sudoku_solver.puzzle import Puzzle
+
 import logging
 
-def candidate_lines(p: Puzzle) -> bool:
+def candidate_lines(p: 'Puzzle') -> bool:
     """
     Applies candidate lines strategy.
 

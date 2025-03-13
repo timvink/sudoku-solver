@@ -18,6 +18,9 @@ from typing import List
 from functools import lru_cache
 from itertools import chain
 
+from sudoku_solver.strategies import single_candidates, single_position, candidate_lines, double_pairs, naked_subset, hidden_subset, multiple_lines
+
+
 console = Console()
 layout = Layout()
 from rich.text import Text
@@ -329,8 +332,6 @@ class Puzzle:
 
     def solve(self):
 
-        # avoid circular imports
-        from sudoku_solver.strategies import single_candidates, single_position, candidate_lines, double_pairs, naked_subset, hidden_subset
 
         # Keep trying strategies until the puzzle is solved
         # Note each strategy will repeat itself until no more cells are solved
@@ -350,6 +351,9 @@ class Puzzle:
                 continue
 
             if double_pairs(self):
+                continue
+
+            if multiple_lines(self):
                 continue
 
             # if naked_subset(self):

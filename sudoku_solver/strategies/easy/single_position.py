@@ -1,9 +1,11 @@
-from sudoku_solver.puzzle import Cell, Puzzle
-from typing import List
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sudoku_solver.puzzle import Cell, Puzzle
+
 from itertools import chain
 import logging
 
-def single_position(p: Puzzle) -> bool:
+def single_position(p: 'Puzzle') -> bool:
     """
     Applies the single position strategy on all cells.
 
