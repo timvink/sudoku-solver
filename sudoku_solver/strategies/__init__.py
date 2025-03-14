@@ -8,10 +8,9 @@ from sudoku_solver.strategies.advanced.naked_triples import naked_triples
 from sudoku_solver.strategies.advanced.naked_quads import naked_quads
 from sudoku_solver.strategies.advanced.hidden_pairs import hidden_pairs
 from sudoku_solver.strategies.advanced.hidden_triples import hidden_triples
-# from sudoku_solver.strategies.advanced.naked_subset import naked_subset
-# from sudoku_solver.strategies.advanced.hidden_subset import hidden_subset
+from sudoku_solver.strategies.advanced.hidden_quads import hidden_quads
 
-__all__ = ["single_candidates","single_position","candidate_lines","double_pairs","naked_pairs","naked_triples","naked_quads","hidden_pairs","multiple_lines","hidden_triples"]
+__all__ = ["single_candidates","single_position","candidate_lines","double_pairs","naked_pairs","naked_triples","naked_quads","hidden_pairs","multiple_lines","hidden_triples","hidden_quads"]
 
 # List of strategies in order of complexity, from simple to advanced
 STRATEGIES = [
@@ -25,6 +24,5 @@ STRATEGIES = [
     naked_quads,
     hidden_pairs,
     hidden_triples,
-    # naked_subset,
-    # hidden_subset,
+    hidden_quads,
 ]

@@ -1,0 +1,93 @@
+from sudoku_solver.puzzle import Row, Cell
+from sudoku_solver.strategies.advanced.hidden_quads import _find_hidden_quads
+from sudoku_solver.strategies.advanced.hidden_triples import _find_hidden_triples
+from sudoku_solver.strategies.advanced.hidden_pairs import _find_hidden_pairs
+from sudoku_solver.strategies.advanced.naked_quads import _find_naked_quads
+
+def test_find_hidden_quads():
+    """
+    Test cases for hidden quads strategy.
+    Examples from https://www.sudokuoftheday.com/techniques/hidden-pairs-triples
+    """
+    # Test case 1: Hidden quad for 1,2,3,4
+    row = Row(1)
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells[0].markup = {5,6,7,8,9}
+    row.cells[1].markup = {5,6,7,8,9}
+    row.cells[2].markup = {5,6,7,8,9}
+    row.cells[3].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[4].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[5].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[6].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[7].markup = {5,6,7,8,9}
+    row.cells[8].markup = {5,6,7,8,9}
+
+    # First verify that other strategies don't find this
+    updated_cells = _find_hidden_pairs(row)
+    assert len(updated_cells) == 0, "Hidden pairs should not identify a quad as a pair"
+    updated_cells = _find_hidden_triples(row)
+    assert len(updated_cells) == 0, "Hidden triples should not identify a quad as a triple"
+    updated_cells = _find_naked_quads(row)
+    assert len(updated_cells) == 0, "Naked quads should not identify a hidden quad"
+
+    # Then verify that hidden quads finds it
+    updated_cells = _find_hidden_quads(row)
+    assert len(updated_cells) == 4  # All four cells should be updated
+    assert row.cells[3].markup == {1,2,3,4}
+    assert row.cells[4].markup == {1,2,3,4}
+    assert row.cells[5].markup == {1,2,3,4}
+    assert row.cells[6].markup == {1,2,3,4}
+
+    # Test case 2: Hidden quad for 5,6,7,8
+    row = Row(1)
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells[0].markup = {1,2,3,4,9}
+    row.cells[1].markup = {1,2,3,4,9}
+    row.cells[2].markup = {1,2,3,4,9}
+    row.cells[3].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[4].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[5].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[6].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[7].markup = {1,2,3,4,9}
+    row.cells[8].markup = {1,2,3,4,9}
+
+    # First verify that other strategies don't find this
+    updated_cells = _find_hidden_pairs(row)
+    assert len(updated_cells) == 0, "Hidden pairs should not identify a quad as a pair"
+    updated_cells = _find_hidden_triples(row)
+    assert len(updated_cells) == 0, "Hidden triples should not identify a quad as a triple"
+    updated_cells = _find_naked_quads(row)
+    assert len(updated_cells) == 0, "Naked quads should not identify a hidden quad"
+
+    # Then verify that hidden quads finds it
+    updated_cells = _find_hidden_quads(row)
+    assert len(updated_cells) == 4  # All four cells should be updated
+    assert row.cells[3].markup == {5,6,7,8}
+    assert row.cells[4].markup == {5,6,7,8}
+    assert row.cells[5].markup == {5,6,7,8}
+    assert row.cells[6].markup == {5,6,7,8}
+
+    # Test case 3: Real-world example with hidden quad
+    row = Row(1)
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells[0].markup = {5,8,9}
+    row.cells[1].markup = {1,4,5,8}
+    row.cells[2].markup = {4,5}
+    row.cells[3].markup = {1,2}
+    row.cells[4].markup = {2,5,9}
+    row.cells[5].markup = {5,6,7}
+    row.cells[6].markup = {4,5,7}
+    row.cells[7].markup = {3,4,5,6}
+    row.cells[8].markup = {3,4,5,7}
+
+    # First verify that other strategies don't find this
+    updated_cells = _find_hidden_pairs(row)
+    assert len(updated_cells) == 0, "Hidden pairs should not identify a quad as a pair"
+    updated_cells = _find_hidden_triples(row)
+    assert len(updated_cells) == 0, "Hidden triples should not identify a quad as a triple"
+    updated_cells = _find_naked_quads(row)
+    assert len(updated_cells) == 0, "Naked quads should not identify a hidden quad"
+
+    # Then verify that hidden quads finds it
+    updated_cells = _find_hidden_quads(row)
+    assert len(updated_cells) == 4 
