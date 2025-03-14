@@ -1,7 +1,6 @@
 from inspect import Traceback
 from tkinter import Listbox
 from rich.jupyter import print
-from rich.console import Group
 from rich.console import ConsoleOptions, RenderResult
 from rich.panel import Panel
 from rich.measure import Measurement
@@ -31,21 +30,21 @@ class Cell:
             value,
             row_id,
             col_id,
-            block = None,
-            row = None,
-            column = None,
-            blockrow = None,
-            blockcolumn = None
+            block,
+            row,
+            column,
+            blockrow,
+            blockcolumn
         ) -> None:
         self.value = value
         self.row_id = row_id
         self.col_id = col_id
 
-        self.block = block
-        self.row = row
-        self.column = column
-        self.blockrow = blockrow
-        self.blockcolumn = blockcolumn
+        self.block = block or Block(0)
+        self.row = row or Row(0)
+        self.column = column or Column(0)
+        self.blockrow = blockrow or BlockRow(0)
+        self.blockcolumn = blockcolumn or BlockColumn(0)
         
         self.markup: set = set(range(1,10)) if value == 0 else set()
 

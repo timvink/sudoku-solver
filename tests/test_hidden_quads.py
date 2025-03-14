@@ -1,4 +1,4 @@
-from sudoku_solver.puzzle import Row, Cell
+from sudoku_solver.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row
 from sudoku_solver.strategies.advanced.hidden_quads import _find_hidden_quads
 from sudoku_solver.strategies.advanced.hidden_triples import _find_hidden_triples
 from sudoku_solver.strategies.advanced.hidden_pairs import _find_hidden_pairs
@@ -9,9 +9,17 @@ def test_find_hidden_quads():
     Test cases for hidden quads strategy.
     Examples from https://www.sudokuoftheday.com/techniques/hidden-pairs-triples
     """
+
+    default_cell_params = {
+        "block": Block(0),
+        "row": Row(0),
+        "column": Column(0),
+        "blockrow": BlockRow(0, []),
+        "blockcolumn": BlockColumn(0, [])
+    }
     # Test case 1: Hidden quad for 1,2,3,4
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].markup = {5,6,7,8,9}
     row.cells[1].markup = {5,6,7,8,9}
     row.cells[2].markup = {5,6,7,8,9}
@@ -40,7 +48,7 @@ def test_find_hidden_quads():
 
     # Test case 2: Hidden quad for 5,6,7,8
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].markup = {1,2,3,4,9}
     row.cells[1].markup = {1,2,3,4,9}
     row.cells[2].markup = {1,2,3,4,9}
@@ -69,7 +77,7 @@ def test_find_hidden_quads():
 
     # Test case 3: Real-world example with hidden quad
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].markup = {5,8,9}
     row.cells[1].markup = {1,4,5,8}
     row.cells[2].markup = {4,5}

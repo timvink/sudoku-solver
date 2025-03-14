@@ -1,4 +1,4 @@
-from sudoku_solver.puzzle import Row, Cell
+from sudoku_solver.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row 
 from sudoku_solver.strategies.advanced.naked_triples import _find_naked_triples
 from sudoku_solver.strategies.advanced.naked_pairs import _find_naked_pairs
 
@@ -7,9 +7,17 @@ def test_find_naked_triples():
     Test cases for naked triples strategy.
     Examples from https://www.sudokuoftheday.com/techniques/naked-pairs-triples
     """
+
+    default_cell_params = {
+        "block": Block(0),
+        "row": Row(0),
+        "column": Column(0),
+        "blockrow": BlockRow(0, []),
+        "blockcolumn": BlockColumn(0, [])
+    }
     # Test case 1: Perfect naked triple
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].value = 9; row.cells[0].markup = set()
     row.cells[1].value = 8; row.cells[1].markup = set()
     row.cells[2].value = 7; row.cells[2].markup = set()
@@ -36,7 +44,7 @@ def test_find_naked_triples():
 
     # Test case 2: Imperfect naked triple
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].value = 9; row.cells[0].markup = set()
     row.cells[1].value = 8; row.cells[1].markup = set()
     row.cells[2].value = 7; row.cells[2].markup = set()
@@ -63,7 +71,7 @@ def test_find_naked_triples():
 
     # Test case 3: Example from the article: https://www.sudokuoftheday.com/techniques/naked-pairs-triples
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].markup = {1,4,9}
     row.cells[1].markup = {1,8}
     row.cells[2].markup = {1,5,8,9}

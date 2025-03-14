@@ -14,11 +14,12 @@ sudoku_details
 """
 import os
 import logging
+from requests.compat import urljoin
 
 # Configure logging based on environment variable
 logging.basicConfig(
     level=os.environ.get('LOGLEVEL', 'INFO').upper(),
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(livename)s - %(message)s'
 )
 
 from datetime import datetime, timedelta
@@ -37,10 +38,10 @@ def fetch_sudoku_details(url):
     if img_tag is None:
         raise ValueError("No image tag with class 'puzzle' found on the page.")
     
-    svg_url = img_tag['src']
+    svg_url = str(img_tag['src']) # type: ignore
     if not svg_url.startswith('http'):
         # If the URL is relative, make it absolute
-        svg_url = requests.compat.urljoin(url, svg_url)
+        svg_url = urljoin(url, svg_url)
     
     # Step 3: Fetch the SVG content
     svg_response = requests.get(svg_url)
@@ -53,7 +54,7 @@ def fetch_sudoku_details(url):
     techniques_div = soup.find('div', class_='techniquelist')
     strategies = []
     if techniques_div:
-        strategies = [a.get_text().strip() for a in techniques_div.find_all('a')]
+        strategies = [a.get_text().strip() for a in techniques_div.find_all('a')] # type: ignore
     
     return {
         'url': url,

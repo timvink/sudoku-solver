@@ -1,3 +1,9 @@
 {
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "cSpell.words": [
+        "blockcolumn",
+        "blockcolumns",
+        "blockrows",
+        "techniquelist"
+    ]
 }

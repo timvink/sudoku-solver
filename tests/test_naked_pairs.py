@@ -1,4 +1,4 @@
-from sudoku_solver.puzzle import Row, Cell
+from sudoku_solver.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row
 from sudoku_solver.strategies.advanced.naked_pairs import _find_naked_pairs
 
 def test_find_naked_pairs():
@@ -6,9 +6,17 @@ def test_find_naked_pairs():
     Test cases for naked pairs strategy.
     Examples from https://www.sudokuoftheday.com/techniques/naked-pairs-triples
     """
+
+    default_cell_params = {
+        "block": Block(0),
+        "row": Row(0),
+        "column": Column(0),
+        "blockrow": BlockRow(0, []),
+        "blockcolumn": BlockColumn(0, [])
+    }
     # Test case 1: Perfect naked pair
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].value = 9; row.cells[0].markup = set()
     row.cells[1].value = 8; row.cells[1].markup = set()
     row.cells[2].value = 7; row.cells[2].markup = set()
@@ -28,7 +36,7 @@ def test_find_naked_pairs():
 
     # Test case 2: Example from the article
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].markup = {1,3,6,9}
     row.cells[1].markup = {1,5}
     row.cells[2].value = 4; row.cells[2].markup = set()
@@ -46,7 +54,7 @@ def test_find_naked_pairs():
 
     # Test case 3: Another example with different markup combinations
     row = Row(1)
-    row.cells = [Cell(value=0, row_id=i+1, col_id=1) for i in range(9)]
+    row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
     row.cells[0].value = 9; row.cells[0].markup = set()
     row.cells[1].value = 8; row.cells[1].markup = set()
     row.cells[2].value = 7; row.cells[2].markup = set()
