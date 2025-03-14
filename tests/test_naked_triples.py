@@ -1,10 +1,10 @@
 from sudoku_solver.puzzle import Row, Cell
-from sudoku_solver.strategies.advanced.naked_triplets import _find_naked_triplets
+from sudoku_solver.strategies.advanced.naked_triples import _find_naked_triples
 from sudoku_solver.strategies.advanced.naked_pairs import _find_naked_pairs
 
-def test_find_naked_triplets():
+def test_find_naked_triples():
     """
-    Test cases for naked triplets strategy.
+    Test cases for naked triples strategy.
     Examples from https://www.sudokuoftheday.com/techniques/naked-pairs-triples
     """
     # Test case 1: Perfect naked triple
@@ -27,8 +27,8 @@ def test_find_naked_triplets():
     assert 2 in row.cells[5].markup
     assert 3 in row.cells[5].markup
 
-    # Then verify that naked triplets finds it
-    updated_cells = _find_naked_triplets(row)
+    # Then verify that naked triples finds it
+    updated_cells = _find_naked_triples(row)
     assert len(updated_cells) == 3
     assert 1 not in row.cells[5].markup
     assert 2 not in row.cells[5].markup
@@ -54,8 +54,8 @@ def test_find_naked_triplets():
     assert 2 in row.cells[5].markup
     assert 3 in row.cells[5].markup
 
-    # Then verify that naked triplets finds it
-    updated_cells = _find_naked_triplets(row)
+    # Then verify that naked triples finds it
+    updated_cells = _find_naked_triples(row)
     assert len(updated_cells) == 3
     assert 1 not in row.cells[5].markup
     assert 2 not in row.cells[5].markup
@@ -81,8 +81,8 @@ def test_find_naked_triplets():
     assert 1 in row.cells[2].markup
     assert 8 in row.cells[2].markup
 
-    # Then verify that naked triplets finds it
-    updated_cells = _find_naked_triplets(row)
+    # Then verify that naked triples finds it
+    updated_cells = _find_naked_triples(row)
     assert len(updated_cells) == 2
     assert 1 not in row.cells[0].markup
     assert 1 not in row.cells[2].markup

@@ -1,6 +1,6 @@
 from sudoku_solver.puzzle import Row, Cell
 from sudoku_solver.strategies.advanced.naked_quads import _find_naked_quads
-from sudoku_solver.strategies.advanced.naked_triplets import _find_naked_triplets
+from sudoku_solver.strategies.advanced.naked_triples import _find_naked_triples
 from sudoku_solver.strategies.advanced.naked_pairs import _find_naked_pairs
 
 def test_find_naked_quads():
@@ -21,11 +21,11 @@ def test_find_naked_quads():
     row.cells[7].markup = {1,2,3,4}
     row.cells[8].markup = {1,2,3,4}
 
-    # First verify that naked pairs and triplets don't find this
+    # First verify that naked pairs and triples don't find this
     updated_cells = _find_naked_pairs(row)
     assert len(updated_cells) == 0, "Naked pairs should not identify a quad as a pair"
-    updated_cells = _find_naked_triplets(row)
-    assert len(updated_cells) == 0, "Naked triplets should not identify a quad as a triplet"
+    updated_cells = _find_naked_triples(row)
+    assert len(updated_cells) == 0, "Naked triples should not identify a quad as a triplet"
     
     # Then verify that naked quads finds it
     updated_cells = _find_naked_quads(row)
@@ -48,11 +48,11 @@ def test_find_naked_quads():
     row.cells[7].markup = {1,4}
     row.cells[8].markup = {3,4}
 
-    # First verify that naked pairs and triplets don't find this
+    # First verify that naked pairs and triples don't find this
     updated_cells = _find_naked_pairs(row)
     assert len(updated_cells) == 0, "Naked pairs should not identify a quad as a pair"
-    updated_cells = _find_naked_triplets(row)
-    assert len(updated_cells) == 0, "Naked triplets should not identify a quad as a triplet"
+    updated_cells = _find_naked_triples(row)
+    assert len(updated_cells) == 0, "Naked triples should not identify a quad as a triplet"
     
     # Then verify that naked quads finds it
     updated_cells = _find_naked_quads(row)
@@ -75,11 +75,11 @@ def test_find_naked_quads():
     row.cells[7].markup = {2,3,9}
     row.cells[8].markup = {3,7}  # quad
 
-    # First verify that naked pairs and triplets don't find this
+    # First verify that naked pairs and triples don't find this
     updated_cells = _find_naked_pairs(row)
     assert len(updated_cells) == 0, "Naked pairs should not identify a quad as a pair"
-    updated_cells = _find_naked_triplets(row)
-    assert len(updated_cells) == 0, "Naked triplets should not identify a quad as a triplet"
+    updated_cells = _find_naked_triples(row)
+    assert len(updated_cells) == 0, "Naked triples should not identify a quad as a triplet"
     
     # Then verify that naked quads finds it
     updated_cells = _find_naked_quads(row)
