@@ -18,8 +18,7 @@ from typing import List
 from functools import lru_cache
 from itertools import chain
 
-from sudoku_solver.strategies import single_candidates, single_position, candidate_lines, double_pairs, naked_subset, hidden_subset, multiple_lines
-
+from sudoku_solver.strategies import STRATEGIES
 
 console = Console()
 layout = Layout()
@@ -331,38 +330,16 @@ class Puzzle:
                 cell.set_solution(cell.value)
 
     def solve(self):
-
-
         # Keep trying strategies until the puzzle is solved
         # Note each strategy will repeat itself until no more cells are solved
         # If a strategy solves at least one cell, and it done with repeating, we move back to the first strategy
         while not self.is_solved():
-
-            # Cells where there is only 1 markup value left
-            if single_candidates(self):
-                continue
-
-            # We check each group, row and column, and update the markup of cells
-            # aka the 'hidden single'.
-            if single_position(self):
-                continue
-
-            if candidate_lines(self):
-                continue
-
-            if double_pairs(self):
-                continue
-
-            if multiple_lines(self):
-                continue
-
-            # if naked_subset(self):
-            #     continue
-
-            # if hidden_subset(self):
-            #     continue
-
-            break
+            # Try each strategy in order of complexity
+            for strategy in STRATEGIES:
+                if strategy(self):
+                    break  # If strategy made progress, break out of for loop to restart from first strategy
+            else:  # If no strategy made any progress
+                break  # Break out of while loop as no progress can be made
 
         if self.is_solved():
             self.validate()
