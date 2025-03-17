@@ -77,15 +77,14 @@ def _check_block_group(blocks, digit, is_row=True):
             lines1 = {c.column.id for c in cells1}
             lines2 = {c.column.id for c in cells2}
         
-        # If both blocks restrict the digit to the same lines
-        # And there are at least two lines
-        if lines1 == lines2 and len(lines1) >= 2:
+        # If both blocks restrict the digit to the same two lines
+        if lines1 == lines2 and len(lines1) == 2:
             # Remove the digit from cells in the third block that are in those lines
             third_block = [b for b in blocks if b != block1 and b != block2][0]
             cells3 = [c for c in third_block.cells if digit in c.markup]
             for cell in cells3:
                 line_id = cell.row.id if is_row else cell.column.id
-                if line_id in lines1:
+                if line_id not in lines1:
                     if cell.remove_markup(digit):
                         logging.debug(f"Multiple lines: Removed {digit} from cell at r{cell.row_id+1}c{cell.col_id+1}")
                         updates += 1

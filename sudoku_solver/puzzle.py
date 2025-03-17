@@ -12,7 +12,7 @@ from rich.table import Table
 from rich.align import Align
 from rich import box
 
-from typing import List
+from typing import List, Callable
 
 from functools import lru_cache
 from itertools import chain
@@ -43,8 +43,8 @@ class Cell:
         self.block = block or Block(0)
         self.row = row or Row(0)
         self.column = column or Column(0)
-        self.blockrow = blockrow or BlockRow(0)
-        self.blockcolumn = blockcolumn or BlockColumn(0)
+        self.blockrow = blockrow or BlockRow(0, [])
+        self.blockcolumn = blockcolumn or BlockColumn(0, [])
         
         self.markup: set = set(range(1,10)) if value == 0 else set()
 
@@ -61,8 +61,11 @@ class Cell:
 
         # Remove the value from the markup of all other cells in the same row, column and block.
         cells_to_update = chain(self.row.cells, self.column.cells, self.block.cells)
+
+        # Validate that value is not the solution of any other cell in the same row, column and block.
         for o in cells_to_update:
             if o != self:
+                assert o.value != value
                 o.remove_markup(self.value)
 
         return self
@@ -328,13 +331,29 @@ class Puzzle:
             if cell.value != 0:
                 cell.set_solution(cell.value)
 
-    def solve(self):
+    def solve(self, strategies: List[Callable] | None = None):
+        """
+        Solve the puzzle using the given strategies.
+
+        Strategies are functions that take a Puzzle as input and return a boolean.
+
+        Args:
+            strategies: List of strategies to use. If no strategies are given, all strategies will be used.
+
+        Returns:
+            True if the puzzle is solved, False otherwise.
+        """
+        if strategies is None:
+            strategies = STRATEGIES
+        # Ensure the right order of strategies
+        strategies = [s for s in STRATEGIES if s in strategies]
+
         # Keep trying strategies until the puzzle is solved
         # Note each strategy will repeat itself until no more cells are solved
         # If a strategy solves at least one cell, and it done with repeating, we move back to the first strategy
         while not self.is_solved():
             # Try each strategy in order of complexity
-            for strategy in STRATEGIES:
+            for strategy in strategies:
                 if strategy(self):
                     break  # If strategy made progress, break out of for loop to restart from first strategy
             else:  # If no strategy made any progress
@@ -345,6 +364,16 @@ class Puzzle:
             return True
         else:
             return False
+
+    def solve_step(self):
+        """
+        Solve the puzzle using the first strategy that makes progress.
+        """
+        for strategy in STRATEGIES:
+            if solved_cells := strategy(self):
+                console.print(f"Solved using {strategy.__name__}")
+                return solved_cells
+        return False
 
     def is_solved(self):
         if not all([c.value != 0 for c in self.cells]):

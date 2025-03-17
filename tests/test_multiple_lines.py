@@ -1,6 +1,7 @@
 from sudoku_solver.puzzle import Puzzle
 from sudoku_solver.strategies.medium.multiple_lines import multiple_lines
 from sudoku_solver.strategies.medium.double_pairs import double_pairs
+from sudoku_solver.strategies import STRATEGIES
 
 def test_multiple_lines():
     """
@@ -41,6 +42,41 @@ def test_multiple_lines():
     # Verify the strategy worked
     assert result == True, "Strategy should have made changes"
     
-    # Verify 5s were removed from column 1 in middle-left block
+    # Verify 5s were removed from column 3 in middle-left block
     for row in [3, 4, 5]:  # rows 4-6
-        assert 5 not in puzzle.rows[row].cells[0].markup, f"5 should be removed from r{row+1}c1"
+        assert 5 not in puzzle.rows[row].cells[2].markup, f"5 should be removed from r{row+1}c3"
+
+
+    # There was another bug where the strategy introduced a wrong solution..
+    grid = [[0, 0, 0, 2, 5, 0, 0, 9, 0], [0, 0, 7, 4, 0, 0, 0, 0, 0], [4, 0, 0, 0, 0, 8, 0, 0, 0], [8, 0, 6, 0, 1, 0, 0, 7, 9], [9, 0, 0, 0, 2, 0, 0, 0, 4], [1, 4, 0, 0, 8, 0, 5, 0, 3], [0, 0, 0, 8, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 1, 9, 0, 0], [0, 2, 0, 0, 6, 5, 0, 0, 0]]
+    puzzle = Puzzle(grid)
+    # solve everything until we get to the multiple lines strategy
+    strategies = []
+    for strategy in STRATEGIES:
+        if strategy.__name__ == "multiple_lines":
+            break
+        strategies.append(strategy)
+    assert puzzle.solve(strategies=strategies) == False, "Puzzle should not be solved"
+
+    status_before = []
+    for cell in puzzle.cells:
+        if cell.value == 0:
+            status_before.append(f"cell r{cell.row_id+1}c{cell.col_id+1}: {cell.markup}")
+
+    assert puzzle.solve_step() == True, "Puzzle should make progress"
+    
+    status_after = []
+    for cell in puzzle.cells:
+        if cell.value == 0:
+            status_after.append(f"cell r{cell.row_id+1}c{cell.col_id+1}: {cell.markup}")
+    # print differences
+    differences = []
+    for before, after in zip(status_before, status_after):
+        if before != after:
+            differences.append(f"{before} -> {after}")
+
+    # It should find
+    assert len(differences) == 2, "Puzzle should make two updates"
+    assert differences[0] == "cell r1c1: {3, 6} -> cell r1c1: {6}"
+    assert differences[1] == "cell r1c3: {3, 8} -> cell r1c3: {8}"
+

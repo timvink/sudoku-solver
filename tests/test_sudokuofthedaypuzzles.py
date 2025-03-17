@@ -1,6 +1,7 @@
 import json
 import pytest
 from sudoku_solver.puzzle import Puzzle
+from sudoku_solver.strategies import STRATEGY_NAMES
 import os
 
 def read_from_json(filename):
@@ -23,40 +24,34 @@ for level in levels:
     unique_strategies = {strategy for ex in EXAMPLES if level in ex['url'] for strategy in ex['strategies']}
     print(f"{level}: {unique_strategies}")
 
-def test_one():
-    ex = EXAMPLES[0]
-    p = Puzzle(ex['puzzle'])
-    p.solve()
-    assert p.is_solved()
-    assert p.strategies_used == set(ex['strategies'])
 
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'beginner' in ex['url']])
 def test_beginner_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    # Constrain strategies to only the ones in the strategies list
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'easy' in ex['url']])
 def test_easy_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'medium' in ex['url']])
 def test_medium_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'tricky' in ex['url']])
-@pytest.mark.skip(reason="Tricky examples are not implemented yet")
 def test_tricky_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
 
@@ -64,7 +59,7 @@ def test_tricky_examples(strategies, puzzle, url):
 @pytest.mark.skip(reason="Fiendish examples are not implemented yet")
 def test_fiendish_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
 
@@ -72,6 +67,6 @@ def test_fiendish_examples(strategies, puzzle, url):
 @pytest.mark.skip(reason="Diabolical examples are not implemented yet")
 def test_diabolical_examples(strategies, puzzle, url):
     p = Puzzle(puzzle)
-    p.solve()
+    p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
     assert p.strategies_used == set(strategies)
