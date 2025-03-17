@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 
 import logging
 
-def candidate_lines(p: 'Puzzle') -> bool:
+def candidate_lines(p: 'Puzzle', digits: list[int] | None = None) -> bool:
     """
     Applies candidate lines strategy.
 
@@ -16,21 +16,21 @@ def candidate_lines(p: 'Puzzle') -> bool:
         bool: Whether 1 or more cells have been updated.
     """
 
-    updates_found = _candidate_lines_iteration(p.blocks)
+    updates_found = _candidate_lines_iteration(p.blocks, digits)
 
     solutions_found = updates_found > 0
     while updates_found > 0:
         p.strategies_used.add("Candidate Lines")
-        updates_found = _candidate_lines_iteration(p.blocks)
+        updates_found = _candidate_lines_iteration(p.blocks, digits)
 
     return solutions_found
 
-def _candidate_lines_iteration(blocks):
+def _candidate_lines_iteration(blocks, digits: list[int] | None = None):
     updates_found = 0
 
     for block in blocks:
-        for value in range(1,10):
-            possible_rows = list(set([c.row for c in block.cells if not c.is_solved and value in c.markup]))
+        for value in digits or range(1,10):
+            possible_rows = list(set([c.row for c in block.cells if value in c.markup]))
             if len(possible_rows) == 1:
                     other_block_cells_in_row = [c for c in possible_rows[0].cells if not c.is_solved and c not in block.cells]
                     updated_cells = [c for c in other_block_cells_in_row if c.remove_markup(value)]

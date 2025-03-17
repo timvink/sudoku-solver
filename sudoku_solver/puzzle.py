@@ -34,7 +34,8 @@ class Cell:
             row,
             column,
             blockrow,
-            blockcolumn
+            blockcolumn,
+            puzzle = None, # for debugging
         ) -> None:
         self.value = value
         self.row_id = row_id
@@ -45,6 +46,7 @@ class Cell:
         self.column = column or Column(0)
         self.blockrow = blockrow or BlockRow(0, [])
         self.blockcolumn = blockcolumn or BlockColumn(0, [])
+        self.puzzle = puzzle or None # for debugging
         
         self.markup: set = set(range(1,10)) if value == 0 else set()
 
@@ -73,6 +75,8 @@ class Cell:
     def remove_markup(self, value):
         if value not in self.markup:
             return False
+        if len(self.markup) == 1:
+            raise Exception(f"Removing last markup value {value} from cell row {self.row_id+1}, column {self.col_id+1}")
         self.markup.remove(value)
         return True
     
@@ -316,7 +320,8 @@ class Puzzle:
                     row=self.rows[row_id],
                     column=self.columns[col_id],
                     blockrow=self.blockrows[blockrow_id],
-                    blockcolumn=self.blockcolumns[blockcolumn_id]
+                    blockcolumn=self.blockcolumns[blockcolumn_id],
+                    puzzle=self
                 )
                 self.cells.append(cell)
 
@@ -365,13 +370,18 @@ class Puzzle:
         else:
             return False
 
-    def solve_step(self):
+    def solve_step(self, strategies: List[Callable] | None = None):
         """
         Solve the puzzle using the first strategy that makes progress.
         """
-        for strategy in STRATEGIES:
+        if strategies is None:
+            strategies = STRATEGIES
+        # Ensure the right order of strategies
+        strategies = [s for s in STRATEGIES if s in strategies]
+
+        for strategy in strategies:
             if solved_cells := strategy(self):
-                console.print(f"Solved using {strategy.__name__}")
+                console.print(f"Made progress using {strategy.__name__}")
                 return solved_cells
         return False
 

@@ -42,9 +42,9 @@ def test_multiple_lines():
     # Verify the strategy worked
     assert result == True, "Strategy should have made changes"
     
-    # Verify 5s were removed from column 3 in middle-left block
+    # Verify 5s were removed from column 1 in middle-left block
     for row in [3, 4, 5]:  # rows 4-6
-        assert 5 not in puzzle.rows[row].cells[2].markup, f"5 should be removed from r{row+1}c3"
+        assert 5 not in puzzle.rows[row].cells[0].markup, f"5 should be removed from r{row+1}c3"
 
 
     # There was another bug where the strategy introduced a wrong solution..
@@ -76,7 +76,7 @@ def test_multiple_lines():
             differences.append(f"{before} -> {after}")
 
     # It should find
-    assert len(differences) == 2, "Puzzle should make two updates"
-    assert differences[0] == "cell r1c1: {3, 6} -> cell r1c1: {6}"
-    assert differences[1] == "cell r1c3: {3, 8} -> cell r1c3: {8}"
+    assert len(differences) == 1, "Puzzle should make one updates"
+    assert differences[0] == "cell r3c3: {3, 9} -> cell r3c3: {9}"
+
 

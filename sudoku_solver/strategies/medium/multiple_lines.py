@@ -84,7 +84,7 @@ def _check_block_group(blocks, digit, is_row=True):
             cells3 = [c for c in third_block.cells if digit in c.markup]
             for cell in cells3:
                 line_id = cell.row.id if is_row else cell.column.id
-                if line_id not in lines1:
+                if line_id in lines1:
                     if cell.remove_markup(digit):
                         logging.debug(f"Multiple lines: Removed {digit} from cell at r{cell.row_id+1}c{cell.col_id+1}")
                         updates += 1

@@ -43,18 +43,13 @@ def single_candidates(p: 'Puzzle') -> bool:
 def _single_candidate_iteration(cells: List['Cell']) -> List['Cell']:
     solved_cells = []
     for cell in cells:
-        if _check_solved(cell):
+        if cell.is_solved:
+            continue
+        if len(cell.markup) == 1:
+            solution = cell.markup.pop()
+            cell.set_solution(solution)
             solved_cells.append(cell)
     return solved_cells
 
-
-def _check_solved(cell: 'Cell') -> bool:
-    if cell.is_solved:
-        return False
-    options = [m for m in cell.markup if m != 0]
-    if len(options) == 1:
-        cell.set_solution(options[0])
-        return True
-    return False
 
 
