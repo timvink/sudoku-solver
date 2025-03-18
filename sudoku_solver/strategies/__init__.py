@@ -9,7 +9,7 @@ from sudoku_solver.strategies.advanced.naked_triples import naked_triples
 from sudoku_solver.strategies.advanced.hidden_triples import hidden_triples
 from sudoku_solver.strategies.advanced.naked_quads import naked_quads
 from sudoku_solver.strategies.advanced.hidden_quads import hidden_quads
-# from sudoku_solver.strategies.master.x_wings import x_wings
+from sudoku_solver.strategies.master.x_wings import x_wings
 
 __all__ = [
     'single_candidates',
@@ -23,7 +23,7 @@ __all__ = [
     'hidden_triples',
     'naked_quads',
     'hidden_quads',
-    # 'x_wings'
+    'x_wings',
 ]
 
 # Strategies in order of complexity
@@ -39,7 +39,7 @@ STRATEGIES = [
     hidden_triples,
     naked_quads,
     hidden_quads,
-    # x_wings
+    x_wings,
 ]
 
 STRATEGY_NAMES = {
@@ -54,5 +54,5 @@ STRATEGY_NAMES = {
     'Hidden Triples': hidden_triples,
     'Naked Quads': naked_quads,
     'Hidden Quads': hidden_quads,
-    # 'X-Wings': 'X-Wings',
+    'X-Wings': x_wings,
 }

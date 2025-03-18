@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 if TYPE_CHECKING:
     from sudoku_solver.puzzle import Puzzle
 
 from itertools import combinations
 import logging
 
-def x_wings(p: 'Puzzle') -> bool:
+def x_wings(p: 'Puzzle', digits: list[int] | None = None) -> bool:
     """
     Applies X-Wings strategy.
 
@@ -22,103 +22,87 @@ def x_wings(p: 'Puzzle') -> bool:
     Returns:
         bool: Whether 1 or more cells have been updated.
     """
-    updates_found = 0
+    updates_found = False
 
     # Check both rows and columns for X-Wings
-    updates_found += _find_x_wings_in_rows(p)
-    updates_found += _find_x_wings_in_columns(p)
+    update_found = 1
+    while update_found > 0:
+        row_xwing_found = _find_x_wing_in_lines(p, digits, "rows")
+        col_xwing_found = _find_x_wing_in_lines(p, digits, "columns")
+        update_found = (row_xwing_found + col_xwing_found) > 0
+        if update_found > 0:
+            updates_found = True
 
-    if updates_found > 0:
-        logging.debug(f"X-Wings iteration updated {updates_found} cells.")
+    if updates_found:
         p.strategies_used.add("X-Wings")
         return True
     
     return False
 
-def _find_x_wings_in_rows(p: 'Puzzle') -> int:
+def _find_x_wing_in_lines(p: 'Puzzle', digits: list[int] | None = None, line_type: Literal["rows", "columns", "blocks"] = "rows") -> int:
     """
-    Find X-Wings in rows and eliminate candidates from columns.
+    Find X-Wings in lines and eliminate candidates from other lines.
     
     Args:
         p: The puzzle to solve
+        digits: The digits to check for X-Wings
+        line_type: The type of lines to check for X-Wings
     
     Returns:
         int: Number of cells updated
     """
     updates_found = 0
     
-    # Check each pair of rows
-    for row1, row2 in combinations(p.rows, 2):
-        # For each candidate number
-        for num in range(1, 10):
-            # Find cells in each row that contain this number
-            cells1 = [cell for cell in row1.cells if not cell.is_solved and num in cell.markup]
-            cells2 = [cell for cell in row2.cells if not cell.is_solved and num in cell.markup]
-            
-            # If both rows have exactly two cells with this number
-            if len(cells1) == 2 and len(cells2) == 2:
-                # Get the column indices
-                cols1 = {cell.col_id for cell in cells1}
-                cols2 = {cell.col_id for cell in cells2}
-                
-                # If the columns match, we found an X-Wing
-                if cols1 == cols2:
-                    # Get the cells that form the X-Wing
-                    x_wing_cells = cells1 + cells2
-                    
-                    # Remove this number from other cells in these columns
-                    for col_id in cols1:
-                        col = p.columns[col_id - 1]
-                        for cell in col.cells:
-                            # Only eliminate from cells that are not part of the X-Wing
-                            if cell not in x_wing_cells and not cell.is_solved:
-                                if num in cell.markup:
-                                    cell.markup.remove(num)
-                                    updates_found += 1
-                                    logging.debug(f"X-Wing in rows: removed {num} from cell ({cell.row_id}, {cell.col_id})")
-    
-    return updates_found
+    # For each candidate number
+    for num in digits or range(1, 10):
+        lines_with_two_cells_with_digit = []
+        for line in p.get_lines(line_type):
+            cells = [cell for cell in line.cells if num in cell.markup]
+            if len(cells) == 2:
+                lines_with_two_cells_with_digit.append(line)
 
-def _find_x_wings_in_columns(p: 'Puzzle') -> int:
-    """
-    Find X-Wings in columns and eliminate candidates from rows.
-    
-    Args:
-        p: The puzzle to solve
-    
-    Returns:
-        int: Number of cells updated
-    """
-    updates_found = 0
-    
-    # Check each pair of columns
-    for col1, col2 in combinations(p.columns, 2):
-        # For each candidate number
-        for num in range(1, 10):
-            # Find cells in each column that contain this number
-            cells1 = [cell for cell in col1.cells if not cell.is_solved and num in cell.markup]
-            cells2 = [cell for cell in col2.cells if not cell.is_solved and num in cell.markup]
+        # Check each pair of lines
+        for line1, line2 in combinations(lines_with_two_cells_with_digit, 2):
+
+            # Find cells in each line that contain this number
+            cells1 = [cell for cell in line1.cells if num in cell.markup]
+            cells2 = [cell for cell in line2.cells if num in cell.markup]
             
-            # If both columns have exactly two cells with this number
-            if len(cells1) == 2 and len(cells2) == 2:
-                # Get the row indices
-                rows1 = {cell.row_id for cell in cells1}
-                rows2 = {cell.row_id for cell in cells2}
+            # both lines should have exactly two cells with this number
+            assert len(cells1) == 2 and len(cells2) == 2
+
+            # If rows, get the column indices
+            if line_type == "rows":
+                x_line_1 = {cell.col_id for cell in cells1}
+                x_line_2 = {cell.col_id for cell in cells2}
+            # If columns, get the row indices
+            elif line_type == "columns":
+                x_line_1 = {cell.row_id for cell in cells1}
+                x_line_2 = {cell.row_id for cell in cells2}
+            else:
+                raise ValueError(f"Invalid line type: {line_type}")
+            
+            # If the cross columns/rows match, we found an X-Wing
+            if x_line_1 == x_line_2:
+                # Get the cells that form the X-Wing
+                x_wing_cells = cells1 + cells2
                 
-                # If the rows match, we found an X-Wing
-                if rows1 == rows2:
-                    # Get the cells that form the X-Wing
-                    x_wing_cells = cells1 + cells2
-                    
-                    # Remove this number from other cells in these rows
-                    for row_id in rows1:
-                        row = p.rows[row_id - 1]
-                        for cell in row.cells:
-                            # Only eliminate from cells that are not part of the X-Wing
-                            if cell not in x_wing_cells and not cell.is_solved:
-                                if num in cell.markup:
-                                    cell.markup.remove(num)
-                                    updates_found += 1
-                                    logging.debug(f"X-Wing in columns: removed {num} from cell ({cell.row_id}, {cell.col_id})")
-    
-    return updates_found 
+                # Remove this number from other cells in these columns
+                for cell in cells1:
+                    if line_type == "rows":
+                        other_line = cell.column
+                    elif line_type == "columns":
+                        other_line = cell.row
+                    else:
+                        raise ValueError(f"Invalid line type: {line_type}")
+
+                    for other_cell in [c for c in other_line.cells if c not in x_wing_cells and not c.is_solved]:
+                        if other_cell.remove_markup(num):
+                            updates_found += 1
+                            logging.debug(f"X-Wing in rows: removed {num} from cell ({other_cell.row_id}, {other_cell.col_id})")
+                
+                # If we made any updates, we need to re-run the strategy from the start
+                if updates_found > 0:
+                    return updates_found
+
+    return updates_found

@@ -12,7 +12,7 @@ from rich.table import Table
 from rich.align import Align
 from rich import box
 
-from typing import List, Callable
+from typing import List, Callable, Literal
 
 from functools import lru_cache
 from itertools import chain
@@ -402,7 +402,16 @@ class Puzzle:
             if not sorted(solutions) == list(range(1,10)):
                 raise Exception("Invalid puzzle solution.")
 
-
+    def get_lines(self, type: Literal["rows", "columns", "blocks"]):
+        if type == "rows":
+            return self.rows
+        elif type == "columns":
+            return self.columns
+        elif type == "blocks":
+            return self.blocks
+        else:
+            raise ValueError(f"Invalid type: {type}")
+    
     def _get_cell(self, row_id, col_id):
         """for debugging"""
         return [c for c in self.cells if c.row_id == row_id and c.col_id == col_id][0]
