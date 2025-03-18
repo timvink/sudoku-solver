@@ -1,20 +1,23 @@
 """
 Example usage:
 
-uv run scripts/collect_training_data.py
+$> uv run scripts/collect_training_data.py
+$> uv run scripts/collect_training_data.py --date YYYY-MM-DD
 
-# training data as JSON
-collected_data = collect_sudoku_data(days=7)
-save_to_json(collected_data, 'sudoku_data-2024-06-05-to-2024-06-14.json')
+Run this in a loop for the last 7 days:
 
-# single url parsing
-url = "https://www.sudokuoftheday.com/dailypuzzles/2024-06-14/beginner"
-sudoku_details = fetch_sudoku_details(url)
-sudoku_details
+```bash
+for i in {0..6}; do
+  date=$(date -d "-$i day" +%Y-%m-%d)
+  uv run scripts/collect_training_data.py --date $date
+done
+```
+
 """
 import os
 import logging
 from requests.compat import urljoin
+import argparse
 
 # Configure logging based on environment variable
 logging.basicConfig(
@@ -118,10 +121,42 @@ def read_from_json(filename):
     with open(filename, 'r') as f:
         return json.load(f)
 
+def main():
+    parser = argparse.ArgumentParser(description='Collect Sudoku training data for a specific date.')
+    parser.add_argument('--date', type=str, help='Date in YYYY-MM-DD format. Defaults to today if not specified.')
+    args = parser.parse_args()
+
+    # Determine the date to collect data for
+    if args.date:
+        try:
+            date = datetime.strptime(args.date, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError('Date must be in YYYY-MM-DD format.')
+    else:
+        date = datetime.now()
+
+    # Collect data for the specified date
+    data = collect_sudoku_data_for_date(date)
+    filename = f'tests/fixtures/sudoku_data-{date.strftime("%Y-%m-%d")}.json'
+    save_to_json(data, filename)
+
+    print(f'Data collected and saved to {filename}')
+
+def collect_sudoku_data_for_date(date):
+    base_url = "https://www.sudokuoftheday.com/dailypuzzles/"
+    levels = ['beginner', 'easy', 'medium', 'tricky', 'fiendish', 'diabolical']
+    collected_data = []
+
+    date_str = date.strftime('%Y-%m-%d')
+    for level in levels:
+        url = f"{base_url}{date_str}/{level}"
+        try:
+            data = fetch_sudoku_details(url)
+            collected_data.append(data)
+        except Exception as e:
+            logging.error(f"Error fetching data for {date_str} {level}: {e}")
+
+    return collected_data
 
 if __name__ == "__main__":
-    # you can't go back more than 9 days, because the site only has data for the past 9 days
-    data = collect_sudoku_data(days=6)
-    today = datetime.now().strftime('%Y-%m-%d')
-    ten_days_ago = (datetime.now() - timedelta(days=9)).strftime('%Y-%m-%d')
-    save_to_json(data, f'tests/fixtures/sudoku_data-{ten_days_ago}-to-{today}.json')
+    main()
