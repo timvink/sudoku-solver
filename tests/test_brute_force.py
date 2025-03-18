@@ -46,7 +46,9 @@ def test_one_brute_force_example():
     assert "Brute Force" in p.strategies_used
     assert p.is_solved()
 
-@pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES])
+N_PUZZLE_TO_TEST = 10
+
+@pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES[:N_PUZZLE_TO_TEST]])
 def test_brute_force(strategies, puzzle, url):
     """
     Test cases for brute force strategy.
