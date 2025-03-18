@@ -42,7 +42,7 @@ def parse_sg(s):
     return tokens[:81] if len(tokens) >= 81 else tokens + [0] * (81 - len(tokens))
 
 def main():
-    url = "https://www.sudokuoftheday.com/image.svg?sg=9(68)(24)(24)5173(68)1(46)73982(46)55(348)(234)(24)76(48)9181(69)72435(69)2(34)(349)165(489)(48)7(46)75983(46)12(46)21537(4689)(468)(4689)75864912339(46)81257(46)"
+    url = "https://www.sudokuoftheday.com/image.svg?sg=195367248W(24)78W(124)5W(14)3693W(24)6W(24)98157(26)(126)378W(14)59W(24)7(12)9W(14)(23)5W(48)(38)65849(23)671(23)8325496719W(46)7(68)13W(48)25W(46)51(68)729(38)W(34)"
 
     # Parse URL to get query parameters
     parsed_url = urllib.parse.urlparse(url)
