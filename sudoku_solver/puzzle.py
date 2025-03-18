@@ -282,7 +282,7 @@ class Puzzle:
     ```
     """
     def __init__(self, grid: List[List[int]]) -> None:
-        self.grid = grid
+        self._grid = grid
 
         self.strategies_used = set()
         self.cells = []
@@ -304,7 +304,7 @@ class Puzzle:
         ]
 
         # Create the cells
-        for row_id, row in enumerate(self.grid):
+        for row_id, row in enumerate(self._grid):
             for col_id, value in enumerate(row):
 
                 # Calculate the block_id (blocks 0-8 from top left to bottom right)
@@ -336,6 +336,10 @@ class Puzzle:
             if cell.value != 0:
                 cell.set_solution(cell.value)
 
+    @property
+    def grid(self):
+        return [[c.value or 0 for c in row.cells] for row in self.rows]
+    
     def solve(self, strategies: List[Callable] | None = None):
         """
         Solve the puzzle using the given strategies.

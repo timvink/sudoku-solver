@@ -111,3 +111,7 @@ I've already implemented the double pairs strategy in `@double_pairs.py` , which
 
 Now write the implementation for `@multiple_lines.py` , as described in `@https://www.sudokuoftheday.com/techniques/multiple-lines` .
 ```
+
+- it's actually much faster than the basic brute force solver. (show some tests)
+
+- git scraper

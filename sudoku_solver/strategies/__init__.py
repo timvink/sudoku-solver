@@ -11,7 +11,7 @@ from sudoku_solver.strategies.advanced.naked_quads import naked_quads
 from sudoku_solver.strategies.advanced.hidden_quads import hidden_quads
 from sudoku_solver.strategies.master.x_wings import x_wings
 from sudoku_solver.strategies.master.swordfish import swordfish
-
+from sudoku_solver.strategies.master.brute_force import brute_force
 __all__ = [
     'single_candidates',
     'single_position',
@@ -26,6 +26,7 @@ __all__ = [
     'hidden_quads',
     'x_wings',
     'swordfish',
+    'brute_force',
 ]
 
 # Strategies in order of complexity
@@ -43,6 +44,7 @@ STRATEGIES = [
     hidden_quads,
     x_wings,
     swordfish,
+    brute_force,
 ]
 
 STRATEGY_NAMES = {
@@ -59,4 +61,5 @@ STRATEGY_NAMES = {
     'Hidden Quads': hidden_quads,
     'X-Wings': x_wings,
     'Swordfish': swordfish,
+    'Brute Force': brute_force,
 }

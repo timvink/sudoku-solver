@@ -65,8 +65,9 @@ def test_fiendish_examples(strategies, puzzle, url):
 
 @pytest.mark.parametrize("strategies, puzzle, url", [(ex['strategies'], ex['puzzle'], ex['url']) for ex in EXAMPLES if 'diabolical' in ex['url']])
 def test_diabolical_examples(strategies, puzzle, url):
-    if any(s in strategies for s in ['Forcing Chains']):
-        pytest.skip("Forcing Chains strategy is not implemented")
+    # We're going to treat forcing chains as a brute force strategy, so rename it
+    strategies = [s if s != 'Forcing Chains' else 'Brute Force' for s in strategies]
+
     p = Puzzle(puzzle)
     p.solve(strategies=[STRATEGY_NAMES[s] for s in strategies])
     assert p.is_solved()
