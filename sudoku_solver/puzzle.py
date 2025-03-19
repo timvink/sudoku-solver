@@ -1,12 +1,5 @@
-from inspect import Traceback
-from tkinter import Listbox
-from rich.jupyter import print
-from rich.console import ConsoleOptions, RenderResult
 from rich.panel import Panel
-from rich.measure import Measurement
-
 from rich.console import Console
-from rich import print
 from rich.layout import Layout
 from rich.table import Table
 from rich.align import Align

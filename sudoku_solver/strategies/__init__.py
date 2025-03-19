@@ -12,21 +12,22 @@ from sudoku_solver.strategies.advanced.hidden_quads import hidden_quads
 from sudoku_solver.strategies.master.x_wings import x_wings
 from sudoku_solver.strategies.master.swordfish import swordfish
 from sudoku_solver.strategies.master.brute_force import brute_force
+
 __all__ = [
-    'single_candidates',
-    'single_position',
-    'candidate_lines',
-    'double_pairs',
-    'multiple_lines',
-    'naked_pairs',
-    'hidden_pairs',
-    'naked_triples',
-    'hidden_triples',
-    'naked_quads',
-    'hidden_quads',
-    'x_wings',
-    'swordfish',
-    'brute_force',
+    "single_candidates",
+    "single_position",
+    "candidate_lines",
+    "double_pairs",
+    "multiple_lines",
+    "naked_pairs",
+    "hidden_pairs",
+    "naked_triples",
+    "hidden_triples",
+    "naked_quads",
+    "hidden_quads",
+    "x_wings",
+    "swordfish",
+    "brute_force",
 ]
 
 # Strategies in order of complexity
@@ -48,18 +49,18 @@ STRATEGIES = [
 ]
 
 STRATEGY_NAMES = {
-    'Single Candidate': single_candidates,
-    'Single Position': single_position,
-    'Candidate Lines': candidate_lines,
-    'Double Pairs': double_pairs,
-    'Multiple Lines': multiple_lines,
-    'Naked Pairs': naked_pairs,
-    'Hidden Pairs': hidden_pairs,
-    'Naked Triples': naked_triples,
-    'Hidden Triples': hidden_triples,
-    'Naked Quads': naked_quads,
-    'Hidden Quads': hidden_quads,
-    'X-Wings': x_wings,
-    'Swordfish': swordfish,
-    'Brute Force': brute_force,
+    "Single Candidate": single_candidates,
+    "Single Position": single_position,
+    "Candidate Lines": candidate_lines,
+    "Double Pairs": double_pairs,
+    "Multiple Lines": multiple_lines,
+    "Naked Pairs": naked_pairs,
+    "Hidden Pairs": hidden_pairs,
+    "Naked Triples": naked_triples,
+    "Hidden Triples": hidden_triples,
+    "Naked Quads": naked_quads,
+    "Hidden Quads": hidden_quads,
+    "X-Wings": x_wings,
+    "Swordfish": swordfish,
+    "Brute Force": brute_force,
 }

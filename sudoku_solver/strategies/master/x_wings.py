@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING, Literal
+
 if TYPE_CHECKING:
     from sudoku_solver.puzzle import Puzzle
 
 from itertools import combinations
 import logging
 
-def x_wings(p: 'Puzzle', digits: list[int] | None = None) -> bool:
+
+def x_wings(p: "Puzzle", digits: list[int] | None = None) -> bool:
     """
     Applies X-Wings strategy.
 
@@ -36,23 +38,28 @@ def x_wings(p: 'Puzzle', digits: list[int] | None = None) -> bool:
     if updates_found:
         p.strategies_used.add("X-Wings")
         return True
-    
+
     return False
 
-def _find_x_wing_in_lines(p: 'Puzzle', digits: list[int] | None = None, line_type: Literal["rows", "columns", "blocks"] = "rows") -> int:
+
+def _find_x_wing_in_lines(
+    p: "Puzzle",
+    digits: list[int] | None = None,
+    line_type: Literal["rows", "columns", "blocks"] = "rows",
+) -> int:
     """
     Find X-Wings in lines and eliminate candidates from other lines.
-    
+
     Args:
         p: The puzzle to solve
         digits: The digits to check for X-Wings
         line_type: The type of lines to check for X-Wings
-    
+
     Returns:
         int: Number of cells updated
     """
     updates_found = 0
-    
+
     # For each candidate number
     for num in digits or range(1, 10):
         lines_with_two_cells_with_digit = []
@@ -63,11 +70,10 @@ def _find_x_wing_in_lines(p: 'Puzzle', digits: list[int] | None = None, line_typ
 
         # Check each pair of lines
         for line1, line2 in combinations(lines_with_two_cells_with_digit, 2):
-
             # Find cells in each line that contain this number
             cells1 = [cell for cell in line1.cells if num in cell.markup]
             cells2 = [cell for cell in line2.cells if num in cell.markup]
-            
+
             # both lines should have exactly two cells with this number
             assert len(cells1) == 2 and len(cells2) == 2
 
@@ -81,12 +87,12 @@ def _find_x_wing_in_lines(p: 'Puzzle', digits: list[int] | None = None, line_typ
                 x_line_2 = {cell.row_id for cell in cells2}
             else:
                 raise ValueError(f"Invalid line type: {line_type}")
-            
+
             # If the cross columns/rows match, we found an X-Wing
             if x_line_1 == x_line_2:
                 # Get the cells that form the X-Wing
                 x_wing_cells = cells1 + cells2
-                
+
                 # Remove this number from other cells in these columns
                 for cell in cells1:
                     if line_type == "rows":
@@ -96,11 +102,17 @@ def _find_x_wing_in_lines(p: 'Puzzle', digits: list[int] | None = None, line_typ
                     else:
                         raise ValueError(f"Invalid line type: {line_type}")
 
-                    for other_cell in [c for c in other_line.cells if c not in x_wing_cells and not c.is_solved]:
+                    for other_cell in [
+                        c
+                        for c in other_line.cells
+                        if c not in x_wing_cells and not c.is_solved
+                    ]:
                         if other_cell.remove_markup(num):
                             updates_found += 1
-                            logging.debug(f"X-Wing in rows: removed {num} from cell ({other_cell.row_id}, {other_cell.col_id})")
-                
+                            logging.debug(
+                                f"X-Wing in rows: removed {num} from cell ({other_cell.row_id}, {other_cell.col_id})"
+                            )
+
                 # If we made any updates, we need to re-run the strategy from the start
                 if updates_found > 0:
                     return updates_found
