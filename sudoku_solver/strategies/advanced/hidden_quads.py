@@ -58,14 +58,11 @@ def _find_hidden_quads(group):
         if len(cells_with_quad) == 4:
             # Check if any other cells contain these values
             other_cells = [cell for cell in unsolved_cells if cell not in cells_with_quad]
+            other_values = set(range(1,10)) - set(quad)
             if not any(any(c in cell.markup for c in quad) for cell in other_cells):
                 # We found a hidden quad - remove all other candidates from these cells
                 for cell in cells_with_quad:
-                    original_markup = cell.markup.copy()
-                    cell.markup = set(quad)  # Keep only the quad candidates
-                    
-                    # If we removed any candidates, add to updated list
-                    if cell.markup != original_markup:
+                    if cell.remove_markup(other_values):
                         updated_cells.append(cell)
     
     return updated_cells 

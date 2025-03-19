@@ -56,11 +56,7 @@ def _find_naked_triples(group):
             # Remove these candidates from all other cells
             other_cells = [cell for cell in unsolved_cells if cell not in cells]
             for cell in other_cells:
-                original_markup = cell.markup.copy()
-                cell.markup -= candidates
-                
-                # If we removed any candidates, add to updated list
-                if cell.markup != original_markup:
+                if cell.remove_markup(candidates):
                     updated_cells.append(cell)
     
     return updated_cells

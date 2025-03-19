@@ -52,12 +52,8 @@ def _find_naked_quads(group):
         if len(combined_candidates) == 4:
             # Remove these candidates from all other cells in group
             for cell in group:
-                if cell not in cells and cell.markup:
-                    original_markup = cell.markup.copy()
-                    cell.markup -= combined_candidates
-                    
-                    # If we removed any candidates, add to updated list
-                    if cell.markup != original_markup:
+                if cell not in cells and not cell.is_solved:
+                    if cell.remove_markup(combined_candidates):
                         updated_cells.append(cell)
     
     return updated_cells

@@ -23,10 +23,10 @@ def test_find_hidden_quads():
     row.cells[0].markup = {5,6,7,8,9}
     row.cells[1].markup = {5,6,7,8,9}
     row.cells[2].markup = {5,6,7,8,9}
-    row.cells[3].markup = {1,2,3,4,5,6,7,8,9}
-    row.cells[4].markup = {1,2,3,4,5,6,7,8,9}
-    row.cells[5].markup = {1,2,3,4,5,6,7,8,9}
-    row.cells[6].markup = {1,2,3,4,5,6,7,8,9}
+    row.cells[3].markup = {1,2,3,4,5,6,7,8,9} # first cell in hidden quad
+    row.cells[4].markup = {1,2,3,4,5,6,7,8,9} # second cell in hidden quad
+    row.cells[5].markup = {1,2,3,4,5,6,7,8,9} # third cell in hidden quad
+    row.cells[6].markup = {1,2,3,4,5,6,7,8,9} # fourth cell in hidden quad
     row.cells[7].markup = {5,6,7,8,9}
     row.cells[8].markup = {5,6,7,8,9}
 
@@ -75,18 +75,19 @@ def test_find_hidden_quads():
     assert row.cells[5].markup == {5,6,7,8}
     assert row.cells[6].markup == {5,6,7,8}
 
-    # Test case 3: Real-world example with hidden quad
+    # Test case 3: Another example with hidden quad
+    # From https://www.sudokuoftheday.com/techniques/hidden-pairs-triples
     row = Row(1)
     row.cells = [Cell(value=0, row_id=i+1, col_id=1, **default_cell_params) for i in range(9)]
-    row.cells[0].markup = {5,8,9}
-    row.cells[1].markup = {1,4,5,8}
+    row.cells[0].markup = {5,8,9} # first cell in hidden quad 1, 2, 8, 9
+    row.cells[1].markup = {1,4,5,8} # second cell in hidden quad 1, 2, 8, 9
     row.cells[2].markup = {4,5}
-    row.cells[3].markup = {1,2}
-    row.cells[4].markup = {2,5,9}
-    row.cells[5].markup = {5,6,7}
-    row.cells[6].markup = {4,5,7}
-    row.cells[7].markup = {3,4,5,6}
-    row.cells[8].markup = {3,4,5,7}
+    row.cells[3].markup = {1,2} # third cell in hidden quad 1, 2, 8, 9
+    row.cells[4].markup = {2,5,9} # fourth cell in hidden quad 1, 2, 8, 9
+    row.cells[5].markup = {5,6,7} 
+    row.cells[6].markup = {4,5,7} 
+    row.cells[7].markup = {3,4,5,6} 
+    row.cells[8].markup = {3,4,5,7} 
 
     # First verify that other strategies don't find this
     updated_cells = _find_hidden_pairs(row)
@@ -98,4 +99,12 @@ def test_find_hidden_quads():
 
     # Then verify that hidden quads finds it
     updated_cells = _find_hidden_quads(row)
-    assert len(updated_cells) == 4 
+
+    for cell in row:
+        print(cell.markup)
+
+    assert row.cells[0].markup == {8,9}
+    assert row.cells[1].markup == {1,8}
+    assert row.cells[3].markup == {1,2}
+    assert row.cells[4].markup == {2,9}
+    assert len(updated_cells) == 3

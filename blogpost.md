@@ -115,3 +115,5 @@ Now write the implementation for `@multiple_lines.py` , as described in `@https:
 - it's actually much faster than the basic brute force solver. (show some tests)
 
 - git scraper
+
+- having lots of tests cases is important, as there are a lot of edge cases.

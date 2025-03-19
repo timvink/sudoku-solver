@@ -1,7 +1,6 @@
 name: Scrape latest puzzle from sudokuoftheday.com
 
 on:
-  push:
   workflow_dispatch: # Manual trigger
   schedule:
     - cron:  '23 2 * * *' # 2:23 AM every day

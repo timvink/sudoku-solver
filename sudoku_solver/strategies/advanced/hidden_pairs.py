@@ -49,7 +49,7 @@ def _find_hidden_pairs(group):
     # Get all candidates from unsolved cells
     all_candidates = set().union(*(cell.markup for cell in unsolved_cells))
     
-    # Check all possible pairs of candidates
+    # Check all possible pairs of candidates, f.e. {1,2}
     for pair in combinations(all_candidates, 2):
         # Find cells that contain any of these candidates
         cells_with_pair = [cell for cell in unsolved_cells if any(c in cell.markup for c in pair)]
@@ -58,15 +58,11 @@ def _find_hidden_pairs(group):
         if len(cells_with_pair) == 2:
             # Check if any other cells contain these values
             other_cells = [cell for cell in unsolved_cells if cell not in cells_with_pair]
+            other_values = set(range(1,10)) - set(pair)
             if not any(any(c in cell.markup for c in pair) for cell in other_cells):
                 # We found a hidden pair - remove all other candidates from these cells
                 for cell in cells_with_pair:
-                    original_markup = cell.markup.copy()
-                    # Keep only the pair candidates that were in the original markup
-                    cell.markup = {c for c in pair if c in original_markup}
-                    
-                    # If we removed any candidates, add to updated list
-                    if cell.markup != original_markup:
+                    if cell.remove_markup(other_values):
                         updated_cells.append(cell)
     
     return updated_cells

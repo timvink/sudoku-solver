@@ -58,15 +58,11 @@ def _find_hidden_triples(group):
         if len(cells_with_triple) == 3:
             # Check if any other cells contain these values
             other_cells = [cell for cell in unsolved_cells if cell not in cells_with_triple]
+            other_values = set(range(1,10)) - set(triple)
             if not any(any(c in cell.markup for c in triple) for cell in other_cells):
                 # We found a hidden triple - remove all other candidates from these cells
                 for cell in cells_with_triple:
-                    original_markup = cell.markup.copy()
-                    # Keep all values from the triple
-                    cell.markup = set(triple)
-                    
-                    # If we removed any candidates, add to updated list
-                    if cell.markup != original_markup:
+                    if cell.remove_markup(other_values):
                         updated_cells.append(cell)
     
     return updated_cells 

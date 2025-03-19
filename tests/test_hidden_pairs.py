@@ -22,10 +22,10 @@ def test_find_hidden_pairs():
     row.cells[2].markup = {4,6}
     row.cells[3].markup = {4,2}
     row.cells[4].value = 8; row.cells[4].markup = set()
-    row.cells[5].markup = {1,3}
+    row.cells[5].markup = {1,3} # first cell in hidden pair
     row.cells[6].value = 5; row.cells[6].markup = set()
     row.cells[7].markup = {2,6}
-    row.cells[8].markup = {1,2,3}
+    row.cells[8].markup = {1,2,3} # second cell in hidden pair. The '2' can be removed.
 
     # First verify that naked pairs doesn't find this
     updated_cells = _find_naked_pairs(row)

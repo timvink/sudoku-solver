@@ -58,27 +58,36 @@ class Cell:
         return self.value != 0
 
     def set_solution(self, value):
+
+        # Validate that value is not the solution of any other cell in the same row, column and block.
+        cells_to_update = chain(self.row.cells, self.column.cells, self.block.cells)
+        cells_to_update = [c for c in cells_to_update if c != self]
+        for o in cells_to_update:
+            assert o.value != value
+        
+        # Update the value and markup
         self.value = value
         self.markup = set()
 
         # Remove the value from the markup of all other cells in the same row, column and block.
-        cells_to_update = chain(self.row.cells, self.column.cells, self.block.cells)
-
-        # Validate that value is not the solution of any other cell in the same row, column and block.
         for o in cells_to_update:
-            if o != self:
-                assert o.value != value
-                o.remove_markup(self.value)
+            o.remove_markup(self.value)
 
         return self
 
-    def remove_markup(self, value):
-        if value not in self.markup:
-            return False
-        if len(self.markup) == 1:
-            raise Exception(f"Removing last markup value {value} from cell row {self.row_id+1}, column {self.col_id+1}")
-        self.markup.remove(value)
-        return True
+    def remove_markup(self, value: set[int] | list[int] | int):
+        if isinstance(value, int):
+            value = [value]
+        updates = False
+        for v in value:
+            if v not in self.markup:
+                continue
+            if len(self.markup) == 1:
+                raise Exception(f"Removing last markup value {v} from cell row {self.row_id+1}, column {self.col_id+1}")
+            updates = True
+            self.markup.remove(v)
+        return updates
+    
     
     def show_markup(self, highlight: int | None = None):
         """
@@ -331,8 +340,11 @@ class Puzzle:
                 self.blockrows[blockrow_id].cells.append(cell)
                 self.blockcolumns[blockcolumn_id].cells.append(cell)
 
-        # Update the solved cells
+        # Update the cells
         for cell in self.cells:
+            # for debugging
+            cell.puzzle = self
+            # Update the solved cells
             if cell.value != 0:
                 cell.set_solution(cell.value)
 
