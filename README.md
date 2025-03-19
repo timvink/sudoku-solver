@@ -9,6 +9,8 @@
 
 This is a sudoku solver that helps you solve sudoku puzzles by showing you the easiest possible strategy required to solve the puzzle.
 
+If you're stuck on a sudoku puzzle, you can use this library to find out if you missed something obvious, or need to apply a more complex strategy to make progress.
+
 ## Setup
 
 Install the package:
@@ -68,10 +70,27 @@ puzzle
 #> ┗━━━┷━━━┷━━━┛ ┗━━━┷━━━┷━━━┛ ┗━━━┷━━━┷━━━┛ 
 ```
 
-## Backlog
+## Techniques implemented
 
-We could add additional strategies to the solver.
+The following techniques are implemented, in order of complexity:
 
-- Y-wings https://sudoku.com/sudoku-rules/y-wing/
-- Forcing Chains: https://www.sudokuoftheday.com/techniques/forcing-chains
-- Explicit separate the Swordfish-3 and Swordfish-4 strategies, as Swordfish-4 is sometimes called "Jellyfish"
+- [Single Candidates](https://www.sudokuoftheday.com/techniques/single-candidate)
+- [Single Position](https://www.sudokuoftheday.com/techniques/single-position)
+- [Candidate Lines](https://www.sudokuoftheday.com/techniques/candidate-lines)
+- [Double Pairs](https://www.sudokuoftheday.com/techniques/double-pairs)
+- [Multiple Lines](https://www.sudokuoftheday.com/techniques/multiple-lines)
+- [Naked Pairs](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
+- [Naked Triples](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
+- [Naked Quads](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
+- [Hidden Pairs](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
+- [Hidden Triples](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
+- [Hidden Quads](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
+- [X-Wings](https://www.sudokuoftheday.com/techniques/x-wings)
+- [Swordfish](https://www.sudokuoftheday.com/techniques/swordfish)
+- `brute_force` (also known as "backtracking"). It will try all possible combinations and backtrack if there is a mistake. You could see this as a variant on the techniques [Forcing Chains](https://www.sudokuoftheday.com/techniques/forcing-chains), [Nishio](https://www.sudokuoftheday.com/techniques/nishio) and [Guessing](https://www.sudokuoftheday.com/techniques/guesswork).
+
+Some remarks:
+
+- We have not implemented [Y-wings](https://sudoku.com/sudoku-rules/y-wing/), although you do not need them given the other strategies.
+- The implementation of `swordfish` included both Swordfish-3 and Swordfish-4. Swordfish-4 is sometimes called "Jellyfish", and could be a separate strategy.
+- [Forcing Chains](https://www.sudokuoftheday.com/techniques/forcing-chains) is not guesswork/brute force, but it's a lot of hard work if you had to do it by hand.
