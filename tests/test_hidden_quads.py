@@ -1,8 +1,8 @@
-from sudoku_solver.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row
-from sudoku_solver.strategies.advanced.hidden_quads import _find_hidden_quads
-from sudoku_solver.strategies.advanced.hidden_triples import _find_hidden_triples
-from sudoku_solver.strategies.advanced.hidden_pairs import _find_hidden_pairs
-from sudoku_solver.strategies.advanced.naked_quads import _find_naked_quads
+from sudoku_solver_tim.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row
+from sudoku_solver_tim.strategies.advanced.hidden_quads import _find_hidden_quads
+from sudoku_solver_tim.strategies.advanced.hidden_triples import _find_hidden_triples
+from sudoku_solver_tim.strategies.advanced.hidden_pairs import _find_hidden_pairs
+from sudoku_solver_tim.strategies.advanced.naked_quads import _find_naked_quads
 
 
 def test_find_hidden_quads():

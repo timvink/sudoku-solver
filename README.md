@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/timvink/sudoku-solver/actions/workflows/unit_test.yml/badge.svg)](https://github.com/timvink/sudoku-solver/actions)
+
 # Sudoku solver
 
 This is a sudoku solver that helps you solve sudoku puzzles by showing you the easiest possible strategy required to solve the puzzle.
@@ -6,10 +8,6 @@ This is a sudoku solver that helps you solve sudoku puzzles by showing you the e
 
 - Improve the interface, given a puzzle, give the easiest strategy to solve the next step.
 
-
-## Ideas
-
-- deploy webapp with optical camera recognition, and solver in Python via PyScript
 
 ## Backlog
 

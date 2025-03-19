@@ -3,16 +3,35 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sudoku-solver"
+name = "sudoku-solver-tim"
 version = "0.1.0"
-description = ""
+description = "Sudoku solver that will use successively more advanced techniques to solve the puzzle."
+readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
     {name = "Tim Vink", email = "vinktim@gmail.com"},
 ]
 requires-python = ">=3.10"
+license = { text = "GNU General Public License v3 (GPLv3)" }
+
+classifiers=[
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+
 dependencies = [
     "rich>=12.4.4",
 ]
+
+
+[project.urls]
+"Homepage" = "https://github.com/timvink/sudoku-solver"
+"Bug Tracker" = "https://github.com/timvink/sudoku-solver/issues"
 
 
 [dependency-groups]

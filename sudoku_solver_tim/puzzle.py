@@ -10,7 +10,7 @@ from typing import List, Callable, Literal
 from functools import lru_cache
 from itertools import chain
 
-from sudoku_solver.strategies import STRATEGIES
+from sudoku_solver_tim.strategies import STRATEGIES
 
 console = Console()
 layout = Layout()

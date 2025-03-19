@@ -117,3 +117,5 @@ Now write the implementation for `@multiple_lines.py` , as described in `@https:
 - git scraper https://simonwillison.net/2020/Oct/9/git-scraping/
 
 - having lots of tests cases is important, as there are a lot of edge cases.
+
+next steps: - deploy webapp with optical camera recognition, and solver in Python via PyScript

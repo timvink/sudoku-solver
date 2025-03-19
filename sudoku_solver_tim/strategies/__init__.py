@@ -1,17 +1,17 @@
-from sudoku_solver.strategies.easy.single_candidates import single_candidates
-from sudoku_solver.strategies.easy.single_position import single_position
-from sudoku_solver.strategies.medium.candidate_lines import candidate_lines
-from sudoku_solver.strategies.medium.double_pairs import double_pairs
-from sudoku_solver.strategies.medium.multiple_lines import multiple_lines
-from sudoku_solver.strategies.advanced.naked_pairs import naked_pairs
-from sudoku_solver.strategies.advanced.hidden_pairs import hidden_pairs
-from sudoku_solver.strategies.advanced.naked_triples import naked_triples
-from sudoku_solver.strategies.advanced.hidden_triples import hidden_triples
-from sudoku_solver.strategies.advanced.naked_quads import naked_quads
-from sudoku_solver.strategies.advanced.hidden_quads import hidden_quads
-from sudoku_solver.strategies.master.x_wings import x_wings
-from sudoku_solver.strategies.master.swordfish import swordfish
-from sudoku_solver.strategies.master.brute_force import brute_force
+from sudoku_solver_tim.strategies.easy.single_candidates import single_candidates
+from sudoku_solver_tim.strategies.easy.single_position import single_position
+from sudoku_solver_tim.strategies.medium.candidate_lines import candidate_lines
+from sudoku_solver_tim.strategies.medium.double_pairs import double_pairs
+from sudoku_solver_tim.strategies.medium.multiple_lines import multiple_lines
+from sudoku_solver_tim.strategies.advanced.naked_pairs import naked_pairs
+from sudoku_solver_tim.strategies.advanced.hidden_pairs import hidden_pairs
+from sudoku_solver_tim.strategies.advanced.naked_triples import naked_triples
+from sudoku_solver_tim.strategies.advanced.hidden_triples import hidden_triples
+from sudoku_solver_tim.strategies.advanced.naked_quads import naked_quads
+from sudoku_solver_tim.strategies.advanced.hidden_quads import hidden_quads
+from sudoku_solver_tim.strategies.master.x_wings import x_wings
+from sudoku_solver_tim.strategies.master.swordfish import swordfish
+from sudoku_solver_tim.strategies.master.brute_force import brute_force
 
 __all__ = [
     "single_candidates",

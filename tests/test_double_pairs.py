@@ -1,6 +1,6 @@
-from sudoku_solver.puzzle import Puzzle
+from sudoku_solver_tim.puzzle import Puzzle
 
-from sudoku_solver.strategies.medium.double_pairs import double_pairs
+from sudoku_solver_tim.strategies.medium.double_pairs import double_pairs
 
 
 def test_double_pairs():

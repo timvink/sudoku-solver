@@ -711,7 +711,7 @@ wheels = [
 ]
 
 [[package]]
-name = "sudoku-solver"
+name = "sudoku-solver-tim"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

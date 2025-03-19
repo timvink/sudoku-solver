@@ -1,4 +1,4 @@
-from sudoku_solver.puzzle import Puzzle
+from sudoku_solver_tim.puzzle import Puzzle
 
 
 def test_solving_sudokus():

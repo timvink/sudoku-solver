@@ -7,7 +7,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-from sudoku_solver.puzzle import Puzzle
+from sudoku_solver_tim.puzzle import Puzzle
 
 tricky_20220707 = [
     [0, 0, 0, 6, 0, 0, 0, 0, 0],

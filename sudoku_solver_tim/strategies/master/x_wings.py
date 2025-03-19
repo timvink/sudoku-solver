@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
-    from sudoku_solver.puzzle import Puzzle
+    from sudoku_solver_tim.puzzle import Puzzle
 
 from itertools import combinations
 import logging

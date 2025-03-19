@@ -1,7 +1,7 @@
 import json
 import pytest
-from sudoku_solver.puzzle import Puzzle
-from sudoku_solver.strategies import STRATEGY_NAMES
+from sudoku_solver_tim.puzzle import Puzzle
+from sudoku_solver_tim.strategies import STRATEGY_NAMES
 import os
 
 

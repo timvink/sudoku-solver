@@ -1,5 +1,5 @@
-from sudoku_solver.puzzle import Puzzle
-from sudoku_solver.strategies.medium.candidate_lines import candidate_lines
+from sudoku_solver_tim.puzzle import Puzzle
+from sudoku_solver_tim.strategies.medium.candidate_lines import candidate_lines
 
 
 def test_candidate_lines():

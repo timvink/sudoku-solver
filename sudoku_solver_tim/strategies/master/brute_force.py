@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Literal, Optional, List
 
 if TYPE_CHECKING:
-    from sudoku_solver.puzzle import Puzzle, Cell
+    from sudoku_solver_tim.puzzle import Puzzle, Cell
 
 import logging
 import copy
