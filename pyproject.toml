@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sudoku-solver-tim"
-version = "0.1.0"
+version = "0.1.1"
 description = "Sudoku solver that will use successively more advanced techniques to solve the puzzle."
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
