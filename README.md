@@ -1,8 +1,6 @@
 [![Actions Status](https://github.com/timvink/sudoku-solver/actions/workflows/unit_test.yml/badge.svg)](https://github.com/timvink/sudoku-solver/actions)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sudoku-solver-tim)
 ![PyPI](https://img.shields.io/pypi/v/sudoku-solver-tim)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/sudoku-solver-tim)
-![GitHub contributors](https://img.shields.io/github/contributors/timvink/sudoku-solver-tim)
 ![PyPI - License](https://img.shields.io/pypi/l/sudoku-solver-tim)
 
 # Sudoku solver
