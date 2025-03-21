@@ -283,6 +283,29 @@ class Puzzle:
     puzzle
     ```
     """
+
+    @classmethod
+    def from_string(cls, string: str) -> "Puzzle":
+        """
+        Often sukodu's come in the form of a string with . or 0 to indicate an empty cell.
+
+        Example:
+
+        ```
+        string = "2.48........7.5....13.....9..7.......26....3.3...26.4...9..845.87.....16....6.2.."
+        puzzle = Puzzle.from_string(string)
+        ```
+
+        Args:
+            string: A string of 81 characters representing a sudoku puzzle.
+
+        Returns:
+            A Puzzle object.
+        """
+        grid = [int(c) if c != "." else 0 for c in string]
+        grid = [grid[i:i+9] for i in range(0, len(grid), 9)]
+        return cls(grid)
+    
     def __init__(self, grid: List[List[int]]) -> None:
         self._grid = grid
 

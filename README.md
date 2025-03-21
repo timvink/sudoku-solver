@@ -11,6 +11,8 @@ This is a sudoku solver that helps you solve sudoku puzzles by showing you the e
 
 If you're stuck on a sudoku puzzle, you can use this library to find out if you missed something obvious, or need to apply a more complex strategy to make progress.
 
+See also my blogpost [Introducing an actually helpful sudoku solver](https://timvink.nl/blog/introducing-sudoku-solver/).
+
 ## Setup
 
 Install the package:
@@ -70,21 +72,36 @@ puzzle
 #> ┗━━━┷━━━┷━━━┛ ┗━━━┷━━━┷━━━┛ ┗━━━┷━━━┷━━━┛ 
 ```
 
+You can also create a puzzle from a string:
+
+```python
+string = "2.48........7.5....13.....9..7.......26....3.3...26.4...9..845.87.....16....6.2.."
+puzzle = Puzzle.from_string(string)
+puzzle.solve()
+```
+
 ## Techniques implemented
 
 The following techniques are implemented, in order of complexity:
 
+Easy:
 - [Single Candidates](https://www.sudokuoftheday.com/techniques/single-candidate)
 - [Single Position](https://www.sudokuoftheday.com/techniques/single-position)
+
+Medium:
 - [Candidate Lines](https://www.sudokuoftheday.com/techniques/candidate-lines)
 - [Double Pairs](https://www.sudokuoftheday.com/techniques/double-pairs)
 - [Multiple Lines](https://www.sudokuoftheday.com/techniques/multiple-lines)
+
+Advanced:
 - [Naked Pairs](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
 - [Naked Triples](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
 - [Naked Quads](https://www.sudokuoftheday.com/techniques/naked-pairs-triples)
 - [Hidden Pairs](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
 - [Hidden Triples](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
 - [Hidden Quads](https://www.sudokuoftheday.com/techniques/hidden-pairs-triples)
+
+Master:
 - [X-Wings](https://www.sudokuoftheday.com/techniques/x-wings)
 - [Swordfish](https://www.sudokuoftheday.com/techniques/swordfish)
 - `brute_force` (also known as "backtracking"). It will try all possible combinations and backtrack if there is a mistake. You could see this as a variant on the techniques [Forcing Chains](https://www.sudokuoftheday.com/techniques/forcing-chains), [Nishio](https://www.sudokuoftheday.com/techniques/nishio) and [Guessing](https://www.sudokuoftheday.com/techniques/guesswork).
