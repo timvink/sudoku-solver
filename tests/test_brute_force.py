@@ -1,9 +1,7 @@
-from sudoku_solver_tim.puzzle import Puzzle, Row, Column, Cell, Block
+from sudoku_solver_tim.puzzle import Puzzle
 from sudoku_solver_tim.strategies.master.brute_force import brute_force
 
 import json
-from sudoku_solver_tim.puzzle import Puzzle
-from sudoku_solver_tim.strategies import STRATEGY_NAMES
 import os
 import pytest
 

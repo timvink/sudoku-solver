@@ -21,7 +21,7 @@ def test_candidate_lines():
     ]
     puzzle = Puzzle(grid)
     result = candidate_lines(puzzle, [4])
-    assert result == True
+    assert result is True
 
     assert 4 not in puzzle.rows[2].cells[7].markup
     assert 4 not in puzzle.rows[5].cells[7].markup

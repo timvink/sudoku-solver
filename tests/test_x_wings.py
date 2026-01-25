@@ -1,4 +1,4 @@
-from sudoku_solver_tim.puzzle import Puzzle, Row, Column, Cell, Block
+from sudoku_solver_tim.puzzle import Puzzle
 from sudoku_solver_tim.strategies.master.x_wings import x_wings
 import logging
 

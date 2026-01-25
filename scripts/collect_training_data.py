@@ -114,7 +114,6 @@ def collect_sudoku_data(days=10):
 
 
 from _ctypes import PyObj_FromPtr  # see https://stackoverflow.com/a/15012814/355230
-import json
 import re
 
 

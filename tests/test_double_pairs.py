@@ -43,7 +43,7 @@ def test_double_pairs():
     puzzle.show_markup(2)
     result = double_pairs(puzzle, [2])
     # Verify the strategy worked
-    assert result == True, "Strategy should have made changes"
+    assert result is True, "Strategy should have made changes"
 
     # Verify 2s were removed from columns 4 and 6 in bottom-middle block
     assert 2 not in puzzle.rows[7].cells[5].markup, "2 should be removed from r8c6"

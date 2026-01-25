@@ -7,10 +7,10 @@ Run using:
 uv run python scripts/benchmark_2k.py
 ```
 """
+
 from sudoku_solver_tim.puzzle import Puzzle
 import time
 import numpy as np
-from sudoku_solver_tim.strategies.master.brute_force import brute_force
 import json
 
 
@@ -21,13 +21,10 @@ def read_grids():
     return [grid.strip() for grid in grids]
 
 
-
-
-
 def calculate_stats(timings):
     if not timings:
         return None
-    
+
     np_timings = np.array(timings)
     return {
         "lower": float(np.percentile(np_timings, 0)),  # min
@@ -35,9 +32,8 @@ def calculate_stats(timings):
         "median": float(np.percentile(np_timings, 50)),
         "q3": float(np.percentile(np_timings, 75)),
         "upper": float(np.percentile(np_timings, 100)),  # max
-        "n": len(timings)
+        "n": len(timings),
     }
-
 
 
 def benchmark_puzzles(grids, strategies=None):
@@ -47,7 +43,7 @@ def benchmark_puzzles(grids, strategies=None):
         start_time = time.time()
         puzzle.solve()
         end_time = time.time()
-        
+
         timings.append(end_time - start_time)
 
     # total time
@@ -60,12 +56,11 @@ def save_results(results, output_file):
     # Write results to JSON file
     with open(output_file, "w") as f:
         json.dump(results, f, indent=4)
-    
 
 
 def main():
     grids = read_grids()
-    stats = benchmark_puzzles(grids)
+    benchmark_puzzles(grids)
     print("Completed full benchmark")
     # save_results(stats, "benchmark_results_2k.json")
 
@@ -76,4 +71,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

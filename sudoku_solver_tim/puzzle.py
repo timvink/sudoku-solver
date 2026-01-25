@@ -4,6 +4,7 @@ from rich.layout import Layout
 from rich.table import Table
 from rich.align import Align
 from rich import box
+from rich.text import Text
 
 from typing import List, Callable, Literal
 
@@ -14,22 +15,21 @@ from sudoku_solver_tim.strategies import STRATEGIES
 
 console = Console()
 layout = Layout()
-from rich.text import Text
 
 
 class Cell:
     def __init__(
-            self,
-            value,
-            row_id,
-            col_id,
-            block,
-            row,
-            column,
-            blockrow,
-            blockcolumn,
-            puzzle = None, # for debugging
-        ) -> None:
+        self,
+        value,
+        row_id,
+        col_id,
+        block,
+        row,
+        column,
+        blockrow,
+        blockcolumn,
+        puzzle=None,  # for debugging
+    ) -> None:
         self.value = value
         self.row_id = row_id
         self.col_id = col_id
@@ -39,9 +39,9 @@ class Cell:
         self.column = column or Column(0)
         self.blockrow = blockrow or BlockRow(0, [])
         self.blockcolumn = blockcolumn or BlockColumn(0, [])
-        self.puzzle = puzzle or None # for debugging
-        
-        self.markup: set = set(range(1,10)) if value == 0 else set()
+        self.puzzle = puzzle or None  # for debugging
+
+        self.markup: set = set(range(1, 10)) if value == 0 else set()
 
     def __repr__(self) -> str:
         return f"Cell(value={self.value}, row_id={self.row_id}, col_id={self.col_id})"
@@ -51,13 +51,12 @@ class Cell:
         return self.value != 0
 
     def set_solution(self, value):
-
         # Validate that value is not the solution of any other cell in the same row, column and block.
         cells_to_update = chain(self.row.cells, self.column.cells, self.block.cells)
         cells_to_update = [c for c in cells_to_update if c != self]
         for o in cells_to_update:
             assert o.value != value
-        
+
         # Update the value and markup
         self.value = value
         self.markup = set()
@@ -76,38 +75,58 @@ class Cell:
             if v not in self.markup:
                 continue
             if len(self.markup) == 1:
-                raise Exception(f"Removing last markup value {v} from cell row {self.row_id+1}, column {self.col_id+1}")
+                raise Exception(
+                    f"Removing last markup value {v} from cell row {self.row_id + 1}, column {self.col_id + 1}"
+                )
             updates = True
             self.markup.remove(v)
         return updates
-    
-    
+
     def show_markup(self, highlight: int | None = None):
         """
         Return printable markup status.
         """
         if self.value != 0:
-            return Panel(Align(Text(str(self.value), justify="center", style="bold"), align="center", vertical="middle"), height=5, width=9)
-        cell = Table(show_header=False, box=None, collapse_padding=True, pad_edge=False, show_edge=False)
+            return Panel(
+                Align(
+                    Text(str(self.value), justify="center", style="bold"),
+                    align="center",
+                    vertical="middle",
+                ),
+                height=5,
+                width=9,
+            )
+        cell = Table(
+            show_header=False,
+            box=None,
+            collapse_padding=True,
+            pad_edge=False,
+            show_edge=False,
+        )
 
         def v(value):
             return str(value) if value in self.markup else ""
-        
+
         cell.add_row(v(1), v(2), v(3))
         cell.add_row(v(4), v(5), v(6))
         cell.add_row(v(7), v(8), v(9))
         color = "#b76e79" if highlight not in self.markup else "#FFD700"
         return Panel(cell, style=color)
 
-    
     def show_value(self):
-        text = Text(str(self.value) if self.value != 0 else " ", justify="center", style="on green")
+        text = Text(
+            str(self.value) if self.value != 0 else " ",
+            justify="center",
+            style="on green",
+        )
         return text
+
 
 class Group:
     """
     BaseClass for a container holding 9 cells.
     """
+
     def __init__(self, id) -> None:
         self.id = id
         self.cells = []
@@ -121,7 +140,7 @@ class Group:
         for cell in self.cells:
             unsolved_values.update(cell.markup)
         return unsolved_values
-    
+
     def __iter__(self):
         """
         Return an iterator over the cells.
@@ -135,18 +154,22 @@ class Group:
     def rows(self):
         assert len(self.cells) > 0
         return sorted(list(set([c.row for c in self.cells])), key=lambda row: row.id)
-    
+
     @property
     @lru_cache
     def columns(self):
         assert len(self.cells) > 0
-        return sorted(list(set([c.column for c in self.cells])), key=lambda column: column.id)
+        return sorted(
+            list(set([c.column for c in self.cells])), key=lambda column: column.id
+        )
 
     @property
     @lru_cache
     def blocks(self):
         assert len(self.cells) > 0
-        return sorted(list(set([c.block for c in self.cells])), key=lambda block: block.id)
+        return sorted(
+            list(set([c.block for c in self.cells])), key=lambda block: block.id
+        )
 
 
 class Block(Group):
@@ -158,7 +181,7 @@ class Block(Group):
         # Which blockrow is this block part of?
         assert len(set([c.blockrow for c in self.cells])) == 1
         return [c.blockrow for c in self.cells][0]
-    
+
     @property
     @lru_cache
     def blockcolumn(self):
@@ -172,7 +195,7 @@ class Block(Group):
         other_blocks_in_row = [b for b in self.blockrow.blocks if b != self]
         assert len(other_blocks_in_row) == 2
         return other_blocks_in_row
-    
+
     @property
     @lru_cache
     def other_blocks_in_column(self):
@@ -184,14 +207,26 @@ class Block(Group):
         # block = Table(show_header=False, width=18, box=box.HEAVY_EDGE, collapse_padding=False, pad_edge=False, padding=False, show_edge=True, show_lines=True)
         block = Table.grid(padding=0)
         block.box = box.HEAVY_EDGE
-        block.show_lines=True
-        block.show_edge=True
-        block.add_row(self.cells[0].show_value(), self.cells[1].show_value(), self.cells[2].show_value())
-        block.add_row(self.cells[3].show_value(), self.cells[4].show_value(), self.cells[5].show_value())
-        block.add_row(self.cells[6].show_value(), self.cells[7].show_value(), self.cells[8].show_value())
-        
+        block.show_lines = True
+        block.show_edge = True
+        block.add_row(
+            self.cells[0].show_value(),
+            self.cells[1].show_value(),
+            self.cells[2].show_value(),
+        )
+        block.add_row(
+            self.cells[3].show_value(),
+            self.cells[4].show_value(),
+            self.cells[5].show_value(),
+        )
+        block.add_row(
+            self.cells[6].show_value(),
+            self.cells[7].show_value(),
+            self.cells[8].show_value(),
+        )
+
         for c in block.columns:
-            c.justify = 'center'
+            c.justify = "center"
             c.width = 3
 
         return block
@@ -199,25 +234,57 @@ class Block(Group):
     def show_markup(self, highlight: int | None = None):
         # block = Table(show_header=False, box=None, collapse_padding=True, pad_edge=False, show_edge=False)
         block = Table.grid(expand=True, collapse_padding=False)
-        block.add_row(self.cells[0].show_markup(highlight), self.cells[1].show_markup(highlight), self.cells[2].show_markup(highlight))
-        block.add_row(self.cells[3].show_markup(highlight), self.cells[4].show_markup(highlight), self.cells[5].show_markup(highlight))
-        block.add_row(self.cells[6].show_markup(highlight), self.cells[7].show_markup(highlight), self.cells[8].show_markup(highlight))
+        block.add_row(
+            self.cells[0].show_markup(highlight),
+            self.cells[1].show_markup(highlight),
+            self.cells[2].show_markup(highlight),
+        )
+        block.add_row(
+            self.cells[3].show_markup(highlight),
+            self.cells[4].show_markup(highlight),
+            self.cells[5].show_markup(highlight),
+        )
+        block.add_row(
+            self.cells[6].show_markup(highlight),
+            self.cells[7].show_markup(highlight),
+            self.cells[8].show_markup(highlight),
+        )
         for c in block.columns:
             c.width = 9
             c.no_wrap = True
         from rich import box
+
         return Panel(block, box=box.MINIMAL)
-    
+
     def __repr__(self):
-        table = Table(show_header=False, box=None, padding=0, show_edge=False, leading=0)
-        # v = 
+        table = Table(
+            show_header=False, box=None, padding=0, show_edge=False, leading=0
+        )
+        # v =
 
         def v(value):
             if value == self.id:
-                return Panel(Align(Text(str(self.id), justify="center", style="bold"), align="center", vertical="middle"), height=5, width=9, style="#FFD700")
+                return Panel(
+                    Align(
+                        Text(str(self.id), justify="center", style="bold"),
+                        align="center",
+                        vertical="middle",
+                    ),
+                    height=5,
+                    width=9,
+                    style="#FFD700",
+                )
             else:
-                return Panel(Align(Text(str(value), justify="center", style="gray"), align="center", vertical="middle"), height=5, width=9)
-        
+                return Panel(
+                    Align(
+                        Text(str(value), justify="center", style="gray"),
+                        align="center",
+                        vertical="middle",
+                    ),
+                    height=5,
+                    width=9,
+                )
+
         table.add_row(v(0), v(1), v(2))
         table.add_row(v(3), v(4), v(5))
         table.add_row(v(6), v(7), v(8))
@@ -227,22 +294,27 @@ class Block(Group):
 
 
 class Row(Group):
-
     @property
     @lru_cache
     def blockrows(self):
         assert len(self.blocks) == 3
-        blockrows = sorted(list(set([c.blockrow for c in self.cells])), key=lambda blockrow: blockrow.id)
+        blockrows = sorted(
+            list(set([c.blockrow for c in self.cells])),
+            key=lambda blockrow: blockrow.id,
+        )
         assert len(blockrows) == 1
         return blockrows
 
-class Column(Group):
 
+class Column(Group):
     @property
     @lru_cache
     def blockrows(self):
         assert len(self.blocks) == 3
-        blockcolumns = sorted(list(set([c.blockcolumn for c in self.cells])), key=lambda blockcolumn: blockcolumn.id)
+        blockcolumns = sorted(
+            list(set([c.blockcolumn for c in self.cells])),
+            key=lambda blockcolumn: blockcolumn.id,
+        )
         assert len(blockcolumns) == 1
         return blockcolumns
 
@@ -257,7 +329,7 @@ class BlockRow:
     def rows(self):
         # Rows that are part of this blockrow
         return self.blocks[0].rows
-    
+
 
 class BlockColumn:
     def __init__(self, id, blocks) -> None:
@@ -303,9 +375,9 @@ class Puzzle:
             A Puzzle object.
         """
         grid = [int(c) if c != "." else 0 for c in string]
-        grid = [grid[i:i+9] for i in range(0, len(grid), 9)]
+        grid = [grid[i : i + 9] for i in range(0, len(grid), 9)]
         return cls(grid)
-    
+
     def __init__(self, grid: List[List[int]]) -> None:
         self._grid = grid
 
@@ -314,24 +386,23 @@ class Puzzle:
         self.blocks = [Block(id) for id in range(9)]
         self.rows = [Row(id) for id in range(9)]
         self.columns = [Column(id) for id in range(9)]
-       
+
         # Add BlockRows and BlockColumns
         # Basically a 3x3 grid of blocks
         self.blockrows = [
-            BlockRow(0, [self.blocks[0],self.blocks[1],self.blocks[2]]),
-            BlockRow(1, [self.blocks[3],self.blocks[4],self.blocks[5]]),
-            BlockRow(2, [self.blocks[6],self.blocks[7],self.blocks[8]])
+            BlockRow(0, [self.blocks[0], self.blocks[1], self.blocks[2]]),
+            BlockRow(1, [self.blocks[3], self.blocks[4], self.blocks[5]]),
+            BlockRow(2, [self.blocks[6], self.blocks[7], self.blocks[8]]),
         ]
         self.blockcolumns = [
-            BlockColumn(0, [self.blocks[0],self.blocks[3],self.blocks[6]]),
-            BlockColumn(1, [self.blocks[1],self.blocks[4],self.blocks[7]]),
-            BlockColumn(2, [self.blocks[2],self.blocks[5],self.blocks[8]])
+            BlockColumn(0, [self.blocks[0], self.blocks[3], self.blocks[6]]),
+            BlockColumn(1, [self.blocks[1], self.blocks[4], self.blocks[7]]),
+            BlockColumn(2, [self.blocks[2], self.blocks[5], self.blocks[8]]),
         ]
 
         # Create the cells
         for row_id, row in enumerate(self._grid):
             for col_id, value in enumerate(row):
-
                 # Calculate the block_id (blocks 0-8 from top left to bottom right)
                 block_id = (row_id // 3) * 3 + (col_id // 3)
                 blockrow_id = row_id // 3
@@ -346,7 +417,7 @@ class Puzzle:
                     column=self.columns[col_id],
                     blockrow=self.blockrows[blockrow_id],
                     blockcolumn=self.blockcolumns[blockcolumn_id],
-                    puzzle=self
+                    puzzle=self,
                 )
                 self.cells.append(cell)
 
@@ -367,7 +438,7 @@ class Puzzle:
     @property
     def grid(self):
         return [[c.value or 0 for c in row.cells] for row in self.rows]
-    
+
     def solve(self, strategies: List[Callable] | None = None):
         """
         Solve the puzzle using the given strategies.
@@ -413,7 +484,8 @@ class Puzzle:
 
         for strategy in strategies:
             if solved_cells := strategy(self):
-                console.print(f"Made progress using {strategy.__name__}")
+                strategy_name = getattr(strategy, "__name__", repr(strategy))
+                console.print(f"Made progress using {strategy_name}")
                 return solved_cells
         return False
 
@@ -431,7 +503,7 @@ class Puzzle:
         """
         for group in chain(self.blocks, self.rows, self.columns):
             solutions = [c.value for c in group.cells]
-            if not sorted(solutions) == list(range(1,10)):
+            if not sorted(solutions) == list(range(1, 10)):
                 raise Exception("Invalid puzzle solution.")
 
     def get_lines(self, type: Literal["rows", "columns", "blocks"]):
@@ -443,26 +515,59 @@ class Puzzle:
             return self.blocks
         else:
             raise ValueError(f"Invalid type: {type}")
-    
+
     def _get_cell(self, row_id, col_id):
         """for debugging"""
         return [c for c in self.cells if c.row_id == row_id and c.col_id == col_id][0]
 
     def show_markup(self, highlight: int | None = None):
         from rich import box
-        table = Table(show_header=False, show_lines=True, box=box.MINIMAL, collapse_padding=False, pad_edge=False, show_edge=True)
-        table.add_row(self.blocks[0].show_markup(highlight), self.blocks[1].show_markup(highlight), self.blocks[2].show_markup(highlight))
-        table.add_row(self.blocks[3].show_markup(highlight), self.blocks[4].show_markup(highlight), self.blocks[5].show_markup(highlight))
-        table.add_row(self.blocks[6].show_markup(highlight), self.blocks[7].show_markup(highlight), self.blocks[8].show_markup(highlight))
-    
+
+        table = Table(
+            show_header=False,
+            show_lines=True,
+            box=box.MINIMAL,
+            collapse_padding=False,
+            pad_edge=False,
+            show_edge=True,
+        )
+        table.add_row(
+            self.blocks[0].show_markup(highlight),
+            self.blocks[1].show_markup(highlight),
+            self.blocks[2].show_markup(highlight),
+        )
+        table.add_row(
+            self.blocks[3].show_markup(highlight),
+            self.blocks[4].show_markup(highlight),
+            self.blocks[5].show_markup(highlight),
+        )
+        table.add_row(
+            self.blocks[6].show_markup(highlight),
+            self.blocks[7].show_markup(highlight),
+            self.blocks[8].show_markup(highlight),
+        )
+
         console.print(table)
 
-
     def __repr__(self):
-        table = Table(show_header=False, box=None, padding=0, show_edge=False, leading=0)
-        table.add_row(self.blocks[0].show_values(), self.blocks[1].show_values(), self.blocks[2].show_values())
-        table.add_row(self.blocks[3].show_values(), self.blocks[4].show_values(), self.blocks[5].show_values())
-        table.add_row(self.blocks[6].show_values(), self.blocks[7].show_values(), self.blocks[8].show_values())
+        table = Table(
+            show_header=False, box=None, padding=0, show_edge=False, leading=0
+        )
+        table.add_row(
+            self.blocks[0].show_values(),
+            self.blocks[1].show_values(),
+            self.blocks[2].show_values(),
+        )
+        table.add_row(
+            self.blocks[3].show_values(),
+            self.blocks[4].show_values(),
+            self.blocks[5].show_values(),
+        )
+        table.add_row(
+            self.blocks[6].show_values(),
+            self.blocks[7].show_values(),
+            self.blocks[8].show_values(),
+        )
 
         table.padding = (0, 1, 0, 0)
         console.print(table)

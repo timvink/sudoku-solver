@@ -34,14 +34,14 @@ def test_multiple_lines():
     puzzle.show_markup(5)
     # Apply the double pairs strategy
     result = double_pairs(puzzle, [5])
-    assert result == False, "Double pairs strategy should not have changed anything"
+    assert result is False, "Double pairs strategy should not have changed anything"
 
     # Apply the multiple lines strategy
     result = multiple_lines(puzzle, [5])
     puzzle.show_markup(5)
 
     # Verify the strategy worked
-    assert result == True, "Strategy should have made changes"
+    assert result is True, "Strategy should have made changes"
 
     # Verify 5s were removed from column 1 in middle-left block
     for row in [3, 4, 5]:  # rows 4-6
@@ -68,7 +68,7 @@ def test_multiple_lines():
         if strategy.__name__ == "multiple_lines":
             break
         strategies.append(strategy)
-    assert puzzle.solve(strategies=strategies) == False, "Puzzle should not be solved"
+    assert puzzle.solve(strategies=strategies) is False, "Puzzle should not be solved"
 
     status_before = []
     for cell in puzzle.cells:
@@ -77,7 +77,7 @@ def test_multiple_lines():
                 f"cell r{cell.row_id + 1}c{cell.col_id + 1}: {cell.markup}"
             )
 
-    assert puzzle.solve_step() == True, "Puzzle should make progress"
+    assert puzzle.solve_step() is True, "Puzzle should make progress"
 
     status_after = []
     for cell in puzzle.cells:

@@ -29,6 +29,7 @@ def test_puzzle_class():
 
     assert p.grid == grid
 
+
 def test_puzzle_from_string():
     string = "2.48........7.5....13.....9..7.......26....3.3...26.4...9..845.87.....16....6.2.."
     grid = [

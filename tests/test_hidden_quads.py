@@ -1,4 +1,4 @@
-from sudoku_solver_tim.puzzle import Row, Cell, Block, BlockRow, BlockColumn, Column, Row
+from sudoku_solver_tim.puzzle import Cell, Block, BlockRow, BlockColumn, Column, Row
 from sudoku_solver_tim.strategies.advanced.hidden_quads import _find_hidden_quads
 from sudoku_solver_tim.strategies.advanced.hidden_triples import _find_hidden_triples
 from sudoku_solver_tim.strategies.advanced.hidden_pairs import _find_hidden_pairs

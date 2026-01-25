@@ -40,6 +40,20 @@ dev = [
     "ipykernel>=6.29.5",
     "marimo>=0.11.22",
     "numpy>=1.23.0",
+    "prek>=0.3.0",
     "pytest>=5.2",
     "requests>=2.32.3",
+    "ty>=0.0.13",
 ]
+
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+include = ["sudoku_solver_tim/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint.per-file-ignores]
+# E402: Module level import not at top of file - these files intentionally configure logging before imports
+"run.py" = ["E402"]
+"sudoku_solver_tim/__init__.py" = ["E402"]
+"scripts/collect_training_data.py" = ["E402"]

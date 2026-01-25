@@ -35,7 +35,7 @@ def swordfish(p: "Puzzle", digits: list[int] | None = None) -> bool:
 def _find_swordfish_in_lines(
     p: "Puzzle",
     digits: list[int] | None = None,
-    line_type: Literal["rows", "columns", "blocks"] = "rows",
+    line_type: Literal["rows", "columns"] = "rows",
 ) -> bool:
     """
     Find Swordfish in lines and eliminate candidates from other lines.
@@ -47,11 +47,7 @@ def _find_swordfish_in_lines(
         digits: The digits to check for Swordfish
         line_type: The type of lines to check for Swordfish
     """
-    if line_type == "rows":
-        lines = p.rows
-    elif line_type == "columns":
-        lines = p.columns
-    else:
+    if line_type not in ("rows", "columns"):
         raise ValueError(f"Invalid line type: {line_type}")
 
     # For each candidate number
