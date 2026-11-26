@@ -1,0 +1,10 @@
+rules:
+  artipacked:
+    ignore:
+      # The job commits the scraped puzzle and pushes with the checkout's
+      # persisted token.
+      - scrape.yml
+  excessive-permissions:
+    ignore:
+      # Pushes the scraped puzzle, so it needs the default write token.
+      - scrape.yml
